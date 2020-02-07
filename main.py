@@ -15,7 +15,7 @@ grassList = []
 
 def main():
 
-	populateCanvas(2, 10)
+	populateCanvas(10, 10)
 
 	while time < 1000:
 		#draw background
@@ -44,7 +44,6 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 			y = random.randint(canvasHeight/4, 3*canvasHeight/4)
 			size = random.randint(6, 10)
 
-
 			#check for overlap of rabbits
 			canPlace = 1
 			for rabbit in rabbitList:
@@ -56,7 +55,7 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 					break	
 			#If no overlap, we can draw it
 			if(canPlace):
-				rabbitList.append(Rabbit((0,0,255), (x, y), size))
+				rabbitList.append(Rabbit((0,0,random.randint(0, 255)), (x, y), size))
 				placed = 1
 				currentRabbitPop += 1
 
@@ -100,19 +99,84 @@ def drawSprites():
 
 def update():
 	global time
-
+	print(time)
 	for rabbit in rabbitList:
+		rabbit.timeSinceLastFuck += dt
 		#dont let rabbit health drop below 0
 		if(rabbit.hunger - rabbit.size*dt <= 0):
 			rabbit.hunger = 0
+			rabbit.health -= rabbit.size*dt
 		else:
 			rabbit.hunger -= rabbit.size*dt
-		
-		#Search for food if hungry(hunger less than half), move randomly if not hungry, or lose health if starving(hunger <= 0)
-		if(rabbit.hunger <= 50):
-			if(rabbit.hunger <= 0):
-				rabbit.health -= rabbit.size*dt
 
+		#If not hungry and havent fucked in a while check for a mate
+		if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 5):
+			print("searching for mate")
+			
+			visibleMates = []
+			#Check if any potential mates are within your vision
+			for rabbitB in rabbitList:
+				
+				#Only go to mate if they're also looking for a mate
+				if(rabbitB.hunger > 50 and rabbitB.timeSinceLastFuck > 5):
+					#Dont check yourself
+					if(rabbitB != rabbit):
+						distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)
+						if(distance <= rabbit.searchRadius):
+							print("See a mate")
+							visibleMates.append(rabbitB)
+
+			#If no visible mates, move randomly
+			if(len(visibleMates) == 0):
+				placed = 0
+
+				while(placed == 0):
+					#Generate random number to determine the direction we move 
+					signX = random.randint(0, 1)
+					signY = random.randint(0, 1)
+
+					if(signX == 0):
+						signX = -1
+					else:
+						signX = 1
+
+					if(signY == 0):
+						signY = -1
+					else:
+						signY = 1
+					#Check if desired location is within our canvas limits
+					if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity < 3*canvasWidth/4):
+						if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity > canvasWidth/4):
+							if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity > canvasHeight/4):
+								if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity < 3*canvasHeight/4):
+									rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
+									placed = 1
+			#If there are visible mates, find the closest one and move towards it
+			else:
+				nearestMate = visibleMates[0]
+				for mate in visibleMates: 
+					nearestMateDistance = math.sqrt((nearestMate.pos[0] - rabbit.pos[0])**2 + (nearestMate.pos[1] - rabbit.pos[1])**2)
+					newDistance = math.sqrt((mate.pos[0] - rabbit.pos[0])**2 + (mate.pos[1] - rabbit.pos[1])**2)
+					if(newDistance < nearestMateDistance):
+						nearestMate = mate
+						nearestMateDistance = newDistance
+				
+				#Move towards nearest grass
+				theta = math.atan2(nearestMate.pos[1] - rabbit.pos[1], nearestMate.pos[0] - rabbit.pos[0])
+				#had to scale it up a little with * 1.5
+				dx = rabbit.velocity * math.cos(theta) * 1.5
+				dy = rabbit.velocity * math.sin(theta) * 1.5
+				rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
+
+				if(int(nearestMateDistance) == 0):
+					rabbit.timeSinceLastFuck = 0
+					nearestMate.timeSinceLastFuck = 0
+					#Make them have sex and spawn a new rabbit by passing averaging the stats of the parental rabbits
+					rabbitList.append(Rabbit((0,0,255), rabbit.pos, rabbit.size))
+					print("Reached mate")
+
+		#Search for food if hungry
+		elif(rabbit.hunger <= 50):
 			#Search through grass within searchRadius
 			visibleGrass = []
 			for grass in grassList:
@@ -173,7 +237,7 @@ def update():
 		#If not hungry just move randomly
 		else:
 			placed = 0
-			
+
 			while(placed == 0):
 				#Generate random number to determine the direction we move 
 				signX = random.randint(0, 1)
@@ -200,9 +264,7 @@ def update():
 		if(rabbit.health <= 0):
 			rabbitList.remove(rabbit)
 
-	
 	time += dt
-
 
 if __name__== '__main__':
 	main()
