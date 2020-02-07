@@ -106,18 +106,18 @@ def drawSprites():
 
 def update():
 	global time
-	time = round(time, 3)
-	print("Time is: " + str(time))
+	time = round(time, 5)
+	print(time)
 
 	#Update all rabbit stuff
 	for rabbit in rabbitList:
 		rabbit.timeSinceLastFuck += dt
 		#dont let rabbit health drop below 0
-		if(rabbit.hunger - rabbit.size*dt <= 0):
+		if(rabbit.hunger - rabbit.size*dt*400 <= 0):
 			rabbit.hunger = 0
-			rabbit.health -= rabbit.size*dt
+			rabbit.health -= rabbit.size*dt*400
 		else:
-			rabbit.hunger -= rabbit.size*dt
+			rabbit.hunger -= rabbit.size*dt*400
 
 		#If not hungry and havent fucked in a while check for a mate
 		if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 5):
@@ -278,7 +278,8 @@ def update():
 			rabbitList.remove(rabbit)
 
 	#Handle grass regrowth
-	if(int(time*1000) % 2400*dt  == 0 and int(time) != 0):
+	#TODO: THIS STOPS REPLATING AFTER A FEW ITTERATIONS OF DT
+	if(time % 0.0001  == 0 and time >= .001):
 		print("time to place")
 		placed = 0
 		while(placed == 0):
@@ -311,7 +312,7 @@ def update():
 	#dt=.001
 
 	time += dt
-	clock.sleep(.050)
+	clock.sleep(.05)
 
 if __name__== '__main__':
 	main()
