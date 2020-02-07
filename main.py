@@ -72,21 +72,22 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 			for rabbit in rabbitList:
 				#distance formula
 				distance = math.sqrt((rabbit.pos[0]-x)**2 + (rabbit.pos[1]-y)**2)
-				if(distance <= rabbit.size+size):
+				#8 is the grass size
+				if(distance <= rabbit.size+8):
 					canPlace = 0
 					break
 
-			#if no overlap with rabbits, check the grass too
+			#if no overlap with rabbits, check the grasses too
 			if(canPlace):
 				for grass in grassList:
 					distance = math.sqrt((grass.pos[0]-x)**2 + (grass.pos[1]-y)**2)
-					if(distance <= grass.size+size):
+					if(distance <= grass.size*2):
 						canPlace = 0
 						break		
 			
 			#If still no overlap, we can draw it
 			if(canPlace):
-				grassList.append(Grass((0,255,0), (x, y), size))
+				grassList.append(Grass((0,255,0), (x, y)))
 				placed = 1
 				currentGrassPop += 1
 				
@@ -100,6 +101,8 @@ def drawSprites():
 def update():
 	global time
 	print(time)
+
+	#Update all rabbit stuff
 	for rabbit in rabbitList:
 		rabbit.timeSinceLastFuck += dt
 		#dont let rabbit health drop below 0
@@ -263,6 +266,39 @@ def update():
 
 		if(rabbit.health <= 0):
 			rabbitList.remove(rabbit)
+
+	#Handle grass regrowth
+	if(int(time*1000) % 600*dt  == 0 and int(time) != 0):
+		print("time to place")
+		placed = 0
+		while(placed == 0):
+			#Create a random set of cords
+			x = random.randint(canvasWidth/4, 3*canvasWidth/4)
+			y = random.randint(canvasHeight/4, 3*canvasHeight/4)
+
+			#check for overlap of rabbits
+			canPlace = 1
+			for rabbit in rabbitList:
+				#distance formula
+				distance = math.sqrt((rabbit.pos[0]-x)**2 + (rabbit.pos[1]-y)**2)
+				if(distance <= rabbit.size+8):
+					canPlace = 0
+					break
+
+			#if no overlap with rabbits, check the grass too
+			if(canPlace):
+				for grass in grassList:
+					distance = math.sqrt((grass.pos[0]-x)**2 + (grass.pos[1]-y)**2)
+					if(distance <= grass.size*2):
+						canPlace = 0
+						break		
+			
+			#If still no overlap, we can draw it
+			if(canPlace):
+				grassList.append(Grass((0,255,0), (x, y)))
+				placed = 1
+				print("Placed grass")
+	#dt=.001
 
 	time += dt
 
