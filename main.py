@@ -12,7 +12,7 @@ rabbitList = []
 
 def main():
 
-	populateCanvas(100)
+	populateCanvas(25)
 
 	while True:
 		canvas.fill((255,255,255))
@@ -40,18 +40,16 @@ def populateCanvas(initialRabbitPop):
 					placed = 1
 					currentRabbitPop += 1
 			else:
-				ableToplace = 0
+				canPLace = 1
 				for rabbit in rabbitList:
 					distance = math.sqrt((rabbit.pos[0]-x)**2 + (rabbit.pos[1]-y)**2)
-					#print(distance - rabbit.size - size)
-					#print(rabbit.size+size)
 					if(distance <= rabbit.size+size):
 						print("overlap")
 						placed = 0
-						ableToplace = 1
+						canPLace = 0
 						break	
 				
-				if(ableToplace == 0):
+				if(canPLace):
 					rabbitList.append(Rabbit((0,0,255), (x, y), size))
 					placed = 1
 					currentRabbitPop += 1
