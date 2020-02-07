@@ -222,8 +222,10 @@ def update():
 					signY = random.randint(0, 1)
 
 					if(signX == 0):
+						print("signX is " + str(signX))
 						signX = -1
 					else:
+						print("signX is " + str(signX))
 						signX = 1
 
 					if(signY == 0):
