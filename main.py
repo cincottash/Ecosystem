@@ -206,6 +206,7 @@ def update():
 				#had to scale it up a little with * 1.5
 				dx = rabbit.velocity * math.cos(theta) * 1.5
 				dy = rabbit.velocity * math.sin(theta) * 1.5
+
 				rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
 
 				#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
