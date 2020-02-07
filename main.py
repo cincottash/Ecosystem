@@ -15,7 +15,7 @@ grassList = []
 
 def main():
 
-	populateCanvas(10, 10)
+	populateCanvas(5, 10)
 
 	while time < 1000:
 		#draw background
@@ -93,14 +93,15 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 				
 def drawSprites():
 	for rabbit in rabbitList:
-		pygame.draw.circle(canvas, rabbit.color, rabbit.pos , rabbit.size)
+		pygame.draw.circle(canvas, rabbit.color, (int(rabbit.pos[0]), int(rabbit.pos[1])) , int(rabbit.size))
 
 	for grass in grassList:
 		pygame.draw.circle(canvas, grass.color, grass.pos, grass.size)
 
 def update():
 	global time
-	print(time)
+	time = round(time, 3)
+	print("Time is: " + str(time))
 
 	#Update all rabbit stuff
 	for rabbit in rabbitList:
@@ -175,7 +176,7 @@ def update():
 					rabbit.timeSinceLastFuck = 0
 					nearestMate.timeSinceLastFuck = 0
 					#Make them have sex and spawn a new rabbit by passing averaging the stats of the parental rabbits
-					rabbitList.append(Rabbit((0,0,255), rabbit.pos, (rabbit.size+nearestMate.size)/2))
+					rabbitList.append(Rabbit((0,0,255), rabbit.pos, int((rabbit.size+nearestMate.size)/2)))
 					print("Reached mate")
 
 		#Search for food if hungry
@@ -209,7 +210,7 @@ def update():
 
 				#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
 				if(int(nearestGrassDistance) == 0):
-					rabbit.hunger += 33
+					rabbit.hunger += 33.0
 					grassList.remove(nearestGrass)
 					print("Reached food")
 			#If no visible grass, move randomly
@@ -222,10 +223,10 @@ def update():
 					signY = random.randint(0, 1)
 
 					if(signX == 0):
-						print("signX is " + str(signX))
+						#print("signX is " + str(signX))
 						signX = -1
 					else:
-						print("signX is " + str(signX))
+						#print("signX is " + str(signX))
 						signX = 1
 
 					if(signY == 0):
@@ -270,7 +271,7 @@ def update():
 			rabbitList.remove(rabbit)
 
 	#Handle grass regrowth
-	if(int(time*1000) % 600*dt  == 0 and int(time) != 0):
+	if(int(time*1000) % 2400*dt  == 0 and int(time) != 0):
 		print("time to place")
 		placed = 0
 		while(placed == 0):
