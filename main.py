@@ -42,7 +42,7 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 			#Create a random set of cords and a random size
 			x = random.randint(canvasWidth/4, 3*canvasWidth/4)
 			y = random.randint(canvasHeight/4, 3*canvasHeight/4)
-			size = random.randint(6, 10)
+			size = random.randint(4, 8)
 
 			#check for overlap of rabbits
 			canPlace = 1
@@ -172,7 +172,7 @@ def update():
 					rabbit.timeSinceLastFuck = 0
 					nearestMate.timeSinceLastFuck = 0
 					#Make them have sex and spawn a new rabbit by passing averaging the stats of the parental rabbits
-					rabbitList.append(Rabbit((0,0,255), rabbit.pos, rabbit.size))
+					rabbitList.append(Rabbit((0,0,255), rabbit.pos, (rabbit.size+nearestMate.size)/2))
 					print("Reached mate")
 
 		#Search for food if hungry
