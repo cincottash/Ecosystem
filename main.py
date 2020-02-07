@@ -55,7 +55,7 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 					break	
 			#If no overlap, we can draw it
 			if(canPlace):
-				rabbitList.append(Rabbit((0,0,random.randint(0, 255)), (x, y), size))
+				rabbitList.append(Rabbit((0,0, 255), (x, y), size))
 				placed = 1
 				currentRabbitPop += 1
 
@@ -93,7 +93,10 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 				
 def drawSprites():
 	for rabbit in rabbitList:
-		pygame.draw.circle(canvas, rabbit.color, (int(rabbit.pos[0]), int(rabbit.pos[1])) , int(rabbit.size))
+		red = 0
+		green = 0
+		blue = 255
+		pygame.draw.circle(canvas, (red, green, blue), (int(rabbit.pos[0]), int(rabbit.pos[1])) , int(rabbit.size))
 
 	for grass in grassList:
 		pygame.draw.circle(canvas, grass.color, grass.pos, grass.size)
