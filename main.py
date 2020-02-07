@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+
 from globals import *
 from rabbit import *
 from grass import *
@@ -16,12 +17,19 @@ def main():
 
 	populateCanvas(15, 25)
 
-	while True:
+	while time < 1000:
+		#draw background
 		canvas.fill((255,255,255))
 
+		#draw sprites over background
 		drawSprites()
 
+		#update sprite attributes
+		update()
+
+		#commit changes
 		pygame.display.update()
+		print(time)
 
 
 def populateCanvas(startingRabbitPop, startingGrassPop):
@@ -91,6 +99,32 @@ def drawSprites():
 	for grass in grassList:
 		pygame.draw.circle(canvas, grass.color, grass.pos, grass.size)
 
+def update():
+	global time
+
+	for rabbit in rabbitList:
+		rabbit.hunger -= rabbit.size*dt
 		
+		#Search for food if hungry(hunger less than half), move randomly if not hungry, or lose health if starving(hunger <= 0)
+		if(rabbit.hunger <= 50):
+			if(rabbit.hunger <= 0):
+				rabbit.health -= rabbit.size*dt
+			#Search through grass within searchRadius
+			else:
+				for grass in grassList:
+					break
+		#TODO: hunger is greater than 50 so move randomly
+		#else:
+
+		
+
+
+		if(rabbit.health <= 0):
+			rabbitList.remove(rabbit)
+
+	
+	time += dt
+
+
 if __name__== '__main__':
 	main()

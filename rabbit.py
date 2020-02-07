@@ -5,7 +5,7 @@ class Rabbit:
 		self.size = size
 		
 		self.searchRadius = self.size*4
-		self.hunger = 100
-		self.thirst = 100
-		self.health = 100
+		self.hunger = 100.0
+		self.thirst = 100.0
+		self.health = 100.0
 		self.velocity = 10/size
