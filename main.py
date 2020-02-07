@@ -15,7 +15,7 @@ grassList = []
 
 def main():
 
-	populateCanvas(2, 25)
+	populateCanvas(2, 10)
 
 	while time < 1000:
 		#draw background
@@ -147,7 +147,54 @@ def update():
 					print("Reached food")
 			#If no visible grass, move randomly
 			else:
+				placed = 0
 
+				while(placed == 0):
+					#Generate random number to determine the direction we move 
+					signX = random.randint(0, 1)
+					signY = random.randint(0, 1)
+
+					if(signX == 0):
+						signX = -1
+					else:
+						signX = 1
+
+					if(signY == 0):
+						signY = -1
+					else:
+						signY = 1
+					#Check if desired location is within our canvas limits
+					if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity < 3*canvasWidth/4):
+						if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity > canvasWidth/4):
+							if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity > canvasHeight/4):
+								if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity < 3*canvasHeight/4):
+									rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
+									placed = 1
+		#If not hungry just move randomly
+		else:
+			placed = 0
+			
+			while(placed == 0):
+				#Generate random number to determine the direction we move 
+				signX = random.randint(0, 1)
+				signY = random.randint(0, 1)
+
+				if(signX == 0):
+					signX = -1
+				else:
+					signX = 1
+
+				if(signY == 0):
+					signY = -1
+				else:
+					signY = 1
+				#Check if desired location is within our canvas limits
+				if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity < 3*canvasWidth/4):
+					if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity > canvasWidth/4):
+						if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity > canvasHeight/4):
+							if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity < 3*canvasHeight/4):
+								rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
+								placed = 1
 		#print("Rabbit hunger %f rabbit health %f" %(rabbit.hunger, rabbit.health))
 
 		if(rabbit.health <= 0):
