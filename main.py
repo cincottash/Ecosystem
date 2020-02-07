@@ -107,7 +107,7 @@ def drawSprites():
 def update():
 	global time
 	time = round(time, 5)
-	print(time)
+	#print(time)
 
 	#Update all rabbit stuff
 	for rabbit in rabbitList:
@@ -120,7 +120,7 @@ def update():
 			rabbit.hunger -= rabbit.size*dt*400
 
 		#If not hungry and havent fucked in a while check for a mate
-		if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 5):
+		if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 0.01):
 			print("searching for mate")
 			
 			visibleMates = []
@@ -128,7 +128,7 @@ def update():
 			for rabbitB in rabbitList:
 				
 				#Only go to mate if they're also looking for a mate
-				if(rabbitB.hunger > 50 and rabbitB.timeSinceLastFuck > 5):
+				if(rabbitB.hunger > 50 and rabbitB.timeSinceLastFuck > 0.01):
 					#Dont check yourself
 					if(rabbitB != rabbit):
 						distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)
@@ -194,7 +194,7 @@ def update():
 				distance = math.sqrt((grass.pos[0] - rabbit.pos[0])**2 + (grass.pos[1] - rabbit.pos[1])**2)-(grass.size + rabbit.size)
 				#find closest grass within search area
 				if(distance <= rabbit.searchRadius):
-					print("Spotted grass")
+					#print("Spotted grass")
 					visibleGrass.append(grass)
 
 			#Find which of the visible grasses is the closest and move towards it
@@ -279,8 +279,8 @@ def update():
 
 	#Handle grass regrowth
 	#TODO: THIS STOPS REPLATING AFTER A FEW ITTERATIONS OF DT
-	if(time % 0.0001  == 0 and time >= .001):
-		print("time to place")
+	if((time*10000.0) % 60.0 == 0 and time > 0.0):
+		print("placing grass at %s" % time)
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
@@ -309,7 +309,6 @@ def update():
 				grassList.append(Grass((0,255,0), (x, y)))
 				placed = 1
 				print("Placed grass")
-	#dt=.001
 
 	time += dt
 	clock.sleep(.05)
