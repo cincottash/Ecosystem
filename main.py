@@ -15,7 +15,7 @@ grassList = []
 
 def main():
 
-	populateCanvas(15, 25)
+	populateCanvas(2, 25)
 
 	while time < 1000:
 		#draw background
@@ -29,7 +29,6 @@ def main():
 
 		#commit changes
 		pygame.display.update()
-		print(time)
 
 
 def populateCanvas(startingRabbitPop, startingGrassPop):
@@ -103,21 +102,53 @@ def update():
 	global time
 
 	for rabbit in rabbitList:
-		rabbit.hunger -= rabbit.size*dt
+		#dont let rabbit health drop below 0
+		if(rabbit.hunger - rabbit.size*dt <= 0):
+			rabbit.hunger = 0
+		else:
+			rabbit.hunger -= rabbit.size*dt
 		
 		#Search for food if hungry(hunger less than half), move randomly if not hungry, or lose health if starving(hunger <= 0)
 		if(rabbit.hunger <= 50):
 			if(rabbit.hunger <= 0):
 				rabbit.health -= rabbit.size*dt
+
 			#Search through grass within searchRadius
+			visibleGrass = []
+			for grass in grassList:
+				#Accounts for circle radius, not just the center coords
+				distance = math.sqrt((grass.pos[0] - rabbit.pos[0])**2 + (grass.pos[1] - rabbit.pos[1])**2)-(grass.size + rabbit.size)
+				#find closest grass within search area
+				if(distance <= rabbit.searchRadius):
+					print("Spotted grass")
+					visibleGrass.append(grass)
+
+			#Find which of the visible grasses is the closest and move towards it
+			if(len(visibleGrass) > 0):
+				nearestGrass = visibleGrass[0]
+				for grass in visibleGrass: 
+					nearestGrassDistance = math.sqrt((nearestGrass.pos[0] - rabbit.pos[0])**2 + (nearestGrass.pos[1] - rabbit.pos[1])**2)
+					newDistance = math.sqrt((grass.pos[0] - rabbit.pos[0])**2 + (grass.pos[1] - rabbit.pos[1])**2)
+					if(newDistance < nearestGrassDistance):
+						nearestGrass = grass
+						nearestGrassDistance = newDistance
+				
+				#Move towards nearest grass
+				theta = math.atan2(nearestGrass.pos[1] - rabbit.pos[1], nearestGrass.pos[0] - rabbit.pos[0])
+				#had to scale it up a little with * 1.5
+				dx = rabbit.velocity * math.cos(theta) * 1.5
+				dy = rabbit.velocity * math.sin(theta) * 1.5
+				rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
+
+				#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
+				if(int(nearestGrassDistance) == 0):
+					rabbit.hunger += 33
+					grassList.remove(nearestGrass)
+					print("Reached food")
+			#If no visible grass, move randomly
 			else:
-				for grass in grassList:
-					break
-		#TODO: hunger is greater than 50 so move randomly
-		#else:
 
-		
-
+		#print("Rabbit hunger %f rabbit health %f" %(rabbit.hunger, rabbit.health))
 
 		if(rabbit.health <= 0):
 			rabbitList.remove(rabbit)

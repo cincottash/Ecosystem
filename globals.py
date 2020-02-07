@@ -3,4 +3,4 @@ canvasHeight = 800
 global time
 global dt
 time = 0.0
-dt = 0.01
+dt = 0.001
