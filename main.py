@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+import time as clock
 
 from globals import *
 from rabbit import *
@@ -55,7 +56,7 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 					break	
 			#If no overlap, we can draw it
 			if(canPlace):
-				rabbitList.append(Rabbit((0,0, 255), (x, y), size))
+				rabbitList.append(Rabbit((x, y), size))
 				placed = 1
 				currentRabbitPop += 1
 
@@ -93,9 +94,11 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 				
 def drawSprites():
 	for rabbit in rabbitList:
-		red = 0
+		
+		red = 255 - ((rabbit.hunger/100)*255)
 		green = 0
-		blue = 255
+		blue = (rabbit.hunger/100)*255
+		
 		pygame.draw.circle(canvas, (red, green, blue), (int(rabbit.pos[0]), int(rabbit.pos[1])) , int(rabbit.size))
 
 	for grass in grassList:
@@ -179,7 +182,7 @@ def update():
 					rabbit.timeSinceLastFuck = 0
 					nearestMate.timeSinceLastFuck = 0
 					#Make them have sex and spawn a new rabbit by passing averaging the stats of the parental rabbits
-					rabbitList.append(Rabbit((0,0,255), rabbit.pos, int((rabbit.size+nearestMate.size)/2)))
+					rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2)))
 					print("Reached mate")
 
 		#Search for food if hungry
@@ -308,6 +311,7 @@ def update():
 	#dt=.001
 
 	time += dt
+	clock.sleep(.050)
 
 if __name__== '__main__':
 	main()
