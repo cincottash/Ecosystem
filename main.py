@@ -174,8 +174,8 @@ def update():
 				#Move towards nearest grass
 				theta = math.atan2(nearestMate.pos[1] - rabbit.pos[1], nearestMate.pos[0] - rabbit.pos[0])
 				#had to scale it up a little with * 1.5
-				dx = rabbit.velocity * math.cos(theta) * 1.5
-				dy = rabbit.velocity * math.sin(theta) * 1.5
+				dx = rabbit.velocity * math.cos(theta) 
+				dy = rabbit.velocity * math.sin(theta) 
 				rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
 
 				if(int(nearestMateDistance) == 0):
@@ -278,7 +278,6 @@ def update():
 			rabbitList.remove(rabbit)
 
 	#Handle grass regrowth
-	#TODO: THIS STOPS REPLATING AFTER A FEW ITTERATIONS OF DT
 	if((time*10000.0) % 60.0 == 0 and time > 0.0):
 		print("placing grass at %s" % time)
 		placed = 0
