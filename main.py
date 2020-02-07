@@ -2,6 +2,8 @@ import pygame
 import random
 import math
 import time as clock
+import matplotlib.pyplot as plt
+import numpy as np
 
 from globals import *
 from rabbit import *
@@ -13,12 +15,14 @@ canvas = pygame.display.set_mode((canvasWidth, canvasHeight))
 
 rabbitList = []
 grassList = []
+rabbitPop = []
+timeStamps = []
 
 def main():
 
-	populateCanvas(5, 10)
+	populateCanvas(10, 20)
 
-	while time < 1000:
+	while time < 0.1:
 		#draw background
 		canvas.fill((255,255,255))
 
@@ -28,8 +32,15 @@ def main():
 		#update sprite attributes
 		update()
 
+		rabbitPop.append(len(rabbitList))
+		timeStamps.append(time*10000)
+
 		#commit changes
 		pygame.display.update()
+	X = np.array(timeStamps)
+	Y = np.array(rabbitPop)
+	plt.scatter(X,Y)
+	plt.show()
 
 
 def populateCanvas(startingRabbitPop, startingGrassPop):
@@ -43,7 +54,7 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 			#Create a random set of cords and a random size
 			x = random.randint(canvasWidth/4, 3*canvasWidth/4)
 			y = random.randint(canvasHeight/4, 3*canvasHeight/4)
-			size = random.randint(4, 8)
+			size = random.randint(6, 10)
 
 			#check for overlap of rabbits
 			canPlace = 1
@@ -107,17 +118,17 @@ def drawSprites():
 def update():
 	global time
 	time = round(time, 5)
-	#print(time)
+	print(time)
 
 	#Update all rabbit stuff
 	for rabbit in rabbitList:
 		rabbit.timeSinceLastFuck += dt
 		#dont let rabbit health drop below 0
-		if(rabbit.hunger - rabbit.size*dt*400 <= 0):
+		if(rabbit.hunger - rabbit.size*dt*500 <= 0):
 			rabbit.hunger = 0
-			rabbit.health -= rabbit.size*dt*400
+			rabbit.health -= rabbit.size*dt*500
 		else:
-			rabbit.hunger -= rabbit.size*dt*400
+			rabbit.hunger -= rabbit.size*dt*700
 
 		#If not hungry and havent fucked in a while check for a mate
 		if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 0.01):
@@ -174,8 +185,8 @@ def update():
 				#Move towards nearest grass
 				theta = math.atan2(nearestMate.pos[1] - rabbit.pos[1], nearestMate.pos[0] - rabbit.pos[0])
 				#had to scale it up a little with * 1.5
-				dx = rabbit.velocity * math.cos(theta) 
-				dy = rabbit.velocity * math.sin(theta) 
+				dx = rabbit.velocity * math.cos(theta) * 1.5
+				dy = rabbit.velocity * math.sin(theta) * 1.5
 				rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
 
 				if(int(nearestMateDistance) == 0):
@@ -216,7 +227,7 @@ def update():
 				rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
 
 				#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
-				if(int(nearestGrassDistance) == 0):
+				if(int(nearestGrassDistance) == int(0)):
 					rabbit.hunger += 33.0
 					grassList.remove(nearestGrass)
 					print("Reached food")
