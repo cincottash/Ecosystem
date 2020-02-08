@@ -13,11 +13,11 @@ global time
 
 def main():
 
-	populateCanvas(10, 40)
+	populateCanvas(12, 40)
 	
 	drawSprites()
 
-	while time < 0.01:
+	while time < maxTime:
 		#reset background
 		canvas.fill(WHITE)
 
@@ -28,17 +28,21 @@ def main():
 		print(time)
 
 		rabbitPop.append(len(rabbitList))
-		timeStamps.append(time*10000)
+		timeStamps.append(time)
+		
+		print(time)
 
 		#commit changes
 		pygame.display.update()
 
+	#print(len(rabbitPop))
+	#print(len(timeStamps))
 	plotStuff()
+
 	
 def update():
 	global time
 	
-	print(time)
 
 	updateRabbitStuff()
 

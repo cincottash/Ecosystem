@@ -15,8 +15,8 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords and a random size
-			x = random.randint(canvasWidth/4, 3*canvasWidth/4)
-			y = random.randint(canvasHeight/4, 3*canvasHeight/4)
+			x = random.randint(canvasWidth/6, 5*canvasWidth/6)
+			y = random.randint(canvasHeight/6, 5*canvasHeight/6)
 			size = random.randint(6, 10)
 
 			#check for overlap of rabbits
@@ -39,8 +39,8 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
-			x = random.randint(canvasWidth/4, 3*canvasWidth/4)
-			y = random.randint(canvasHeight/4, 3*canvasHeight/4)
+			x = random.randint(canvasWidth/6, 5*canvasWidth/6)
+			y = random.randint(canvasHeight/6, 5*canvasHeight/6)
 
 			#check for overlap of rabbits
 			canPlace = 1
@@ -69,12 +69,26 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 def updateRabbitStuff():
 	for rabbit in rabbitList:
 		rabbit.timeSinceLastFuck += dt
-		#dont let rabbit health drop below 0
-		if(rabbit.hunger - rabbit.size*dt*500 <= 0):
+		
+		#Check if rabbit is starving aka the next hunger tick drops hunger leq 0
+		if(rabbit.hunger - rabbit.size*dt*300 <= 0):
+
+			#dont let hunger drop below 0 if starving
 			rabbit.hunger = 0
-			rabbit.health -= rabbit.size*dt*500
+
+			#Since we're starving, check if the next tick of health loss will kill us
+			if(rabbit.health - rabbit.size*dt*300 <= 0):
+
+				#if it will kill us, remove the rabbit
+				rabbitList.remove(rabbit)
+				#DOnt bother doing other stuff stince we're dead
+				continue
+			else:
+				#otherwise just reduce our health
+				rabbit.health -= rabbit.size*dt*300
 		else:
-			rabbit.hunger -= rabbit.size*dt*600
+			#if not starving, reduce health
+			rabbit.hunger -= rabbit.size*dt*300
 
 		#If not hungry and havent fucked in a while check for a mate
 		if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 0.01):
@@ -112,10 +126,10 @@ def updateRabbitStuff():
 					else:
 						signY = 1
 					#Check if desired location is within our canvas limits
-					if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity < 3*canvasWidth/4):
-						if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity > canvasWidth/4):
-							if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity > canvasHeight/4):
-								if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity < 3*canvasHeight/4):
+					if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity < 5*canvasWidth/6):
+						if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity > canvasWidth/6):
+							if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity > canvasHeight/6):
+								if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity < 5*canvasHeight/6):
 									rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
 									placed = 1
 			#If there are visible mates, find the closest one and move towards it
@@ -158,6 +172,7 @@ def updateRabbitStuff():
 			if(len(visibleGrass) > 0):
 				nearestGrass = visibleGrass[0]
 				for grass in visibleGrass: 
+					#just start with the closest grass being the first visible one
 					nearestGrassDistance = math.sqrt((nearestGrass.pos[0] - rabbit.pos[0])**2 + (nearestGrass.pos[1] - rabbit.pos[1])**2)
 					newDistance = math.sqrt((grass.pos[0] - rabbit.pos[0])**2 + (grass.pos[1] - rabbit.pos[1])**2)
 					if(newDistance < nearestGrassDistance):
@@ -173,8 +188,11 @@ def updateRabbitStuff():
 				rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
 
 				#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
-				if(int(nearestGrassDistance) <= int(0)):
-					rabbit.hunger += 33.0
+				if(nearestGrassDistance < 5):
+					if(rabbit.hunger + 33.0 >= 100.0):	
+						rabbit.hunger = 100.0
+					else:
+						rabbit.hunger += 33.0
 					grassList.remove(nearestGrass)
 					print("Reached food")
 			#If no visible grass, move randomly
@@ -198,10 +216,10 @@ def updateRabbitStuff():
 					else:
 						signY = 1
 					#Check if desired location is within our canvas limits
-					if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity < 3*canvasWidth/4):
-						if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity > canvasWidth/4):
-							if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity > canvasHeight/4):
-								if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity < 3*canvasHeight/4):
+					if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity < 5*canvasWidth/6):
+						if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity > canvasWidth/6):
+							if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity > canvasHeight/6):
+								if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity < 5*canvasHeight/6):
 									rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
 									placed = 1
 		#If not hungry just move randomly
@@ -223,16 +241,15 @@ def updateRabbitStuff():
 				else:
 					signY = 1
 				#Check if desired location is within our canvas limits
-				if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity < 3*canvasWidth/4):
-					if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity > canvasWidth/4):
-						if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity > canvasHeight/4):
-							if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity < 3*canvasHeight/4):
+				if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity < 5*canvasWidth/6):
+					if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity > canvasWidth/6):
+						if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity > canvasHeight/6):
+							if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity < 5*canvasHeight/6):
 								rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
 								placed = 1
 		#print("Rabbit hunger %f rabbit health %f" %(rabbit.hunger, rabbit.health))
 
-		if(rabbit.health <= 0):
-			rabbitList.remove(rabbit)		
+				
 
 def updateGrassStuff():
 	#Handle grass regrowth
@@ -241,8 +258,8 @@ def updateGrassStuff():
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
-			x = random.randint(canvasWidth/4, 3*canvasWidth/4)
-			y = random.randint(canvasHeight/4, 3*canvasHeight/4)
+			x = random.randint(canvasWidth/6, 5*canvasWidth/6)
+			y = random.randint(canvasHeight/6, 5*canvasHeight/6)
 
 			#check for overlap of rabbits
 			canPlace = 1
