@@ -21,9 +21,10 @@ def main():
 		#reset background
 		canvas.fill(WHITE)
 
+		update()
+		
 		drawSprites()
 
-		update()
 		
 		print(time)
 
