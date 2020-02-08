@@ -23,7 +23,7 @@ def plotStuff():
 	plt.scatter(X, Y, s = 3.0)
 	plt.title('Average Rabbit Size vs Time')
 	plt.xlim(0, maxTime)
-	plt.ylim(6, 21)
+	plt.ylim(6, 16)
 	plt.grid(True)
 	
 	plt.show()
