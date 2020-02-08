@@ -4,7 +4,7 @@ canvasHeight = 1000
 global time
 global dt
 global maxTime
-maxTime = 0.12
+maxTime = 0.15
 time = 0.00000
 dt = 0.00005
 

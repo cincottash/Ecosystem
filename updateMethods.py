@@ -92,7 +92,7 @@ def updateRabbitStuff():
 
 		#If not hungry and havent fucked in a while check for a mate
 		if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 0.01):
-			print("searching for mate")
+			#print("searching for mate")
 			
 			visibleMates = []
 			#Check if any potential mates are within your vision
@@ -104,7 +104,7 @@ def updateRabbitStuff():
 					if(rabbitB != rabbit):
 						distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)
 						if(distance <= rabbit.searchRadius):
-							print("See a mate")
+							#print("See a mate")
 							visibleMates.append(rabbitB)
 
 			#If no visible mates, move randomly
@@ -252,9 +252,9 @@ def updateRabbitStuff():
 def updateGrassStuff(time1):
 	#Handle grass regrowth
 	currentTime = time1
-	print(int(currentTime*10000.0 % 30))
+	#print(int(currentTime*10000.0 % 30))
 	if(int(currentTime*10000.0 % 30) == 0 and int(currentTime*10000.0) > 0):
-		print("placing grass at %s" % currentTime)
+		#print("placing grass at %s" % currentTime)
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
