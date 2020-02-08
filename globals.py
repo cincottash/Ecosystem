@@ -1,5 +1,5 @@
-canvasWidth = 800
-canvasHeight = 800
+canvasWidth = 1600
+canvasHeight = 1200
 global time
 global dt
 time = 0.00000

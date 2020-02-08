@@ -42,7 +42,7 @@ def updatePlotStuff():
 	X = np.array(timeStamps)
 	Y = np.array(rabbitPop)
 	test = plt.scatter(X,Y)
-	#plt.pause(0.05)
+	plt.pause(0.05)
 	plt.show(test)
 
 def populateCanvas(startingRabbitPop, startingGrassPop):
