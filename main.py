@@ -128,7 +128,7 @@ def update():
 			rabbit.hunger = 0
 			rabbit.health -= rabbit.size*dt*500
 		else:
-			rabbit.hunger -= rabbit.size*dt*700
+			rabbit.hunger -= rabbit.size*dt*600
 
 		#If not hungry and havent fucked in a while check for a mate
 		if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 0.01):
@@ -190,8 +190,8 @@ def update():
 				rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
 
 				if(int(nearestMateDistance) == 0):
-					rabbit.timeSinceLastFuck = 0
-					nearestMate.timeSinceLastFuck = 0
+					rabbit.timeSinceLastFuck = 0.0
+					nearestMate.timeSinceLastFuck = 0.0
 					#Make them have sex and spawn a new rabbit by passing averaging the stats of the parental rabbits
 					rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2)))
 					print("Reached mate")
@@ -227,7 +227,7 @@ def update():
 				rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
 
 				#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
-				if(int(nearestGrassDistance) == int(0)):
+				if(int(nearestGrassDistance) <= int(0)):
 					rabbit.hunger += 33.0
 					grassList.remove(nearestGrass)
 					print("Reached food")
