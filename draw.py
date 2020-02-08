@@ -6,11 +6,19 @@ canvas = pygame.display.set_mode((canvasWidth, canvasHeight))
 
 def drawSprites():
 	for rabbit in rabbitList:
-		red = 255 - ((rabbit.hunger/100)*255)
-		green = 0
-		blue = (rabbit.hunger/100)*255
+		#if starving, make it black
+		if(rabbit.hunger == 0.0):
+			pygame.draw.circle(canvas, BLACK, (int(rabbit.pos[0]), int(rabbit.pos[1])), rabbit.size)
+		#if just hungry, completly red
+		elif(rabbit.hunger < 50):
+			pygame.draw.circle(canvas, RED, (int(rabbit.pos[0]), int(rabbit.pos[1])), rabbit.size)
+		#Not hungry
+		else:
+			red = int(255 - (((rabbit.hunger-50)/50)*255))
+			green = int(0)
+			blue = int(((rabbit.hunger-50)/50)*255)
 		
-		pygame.draw.circle(canvas, (red, green, blue), (int(rabbit.pos[0]), int(rabbit.pos[1])), rabbit.size)
+			pygame.draw.circle(canvas, (red, green, blue), (int(rabbit.pos[0]), int(rabbit.pos[1])), rabbit.size)
 
 	for grass in grassList:
 		pygame.draw.circle(canvas, grass.color, grass.pos, grass.size)

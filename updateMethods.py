@@ -39,8 +39,8 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
-			x = random.randint(canvasWidth/6, 5*canvasWidth/6)
-			y = random.randint(canvasHeight/6, 5*canvasHeight/6)
+			x = random.randint(int(canvasWidth/6), int(5*canvasWidth/6))
+			y = random.randint(int(canvasHeight/6), int(5*canvasHeight/6))
 
 			#check for overlap of rabbits
 			canPlace = 1
