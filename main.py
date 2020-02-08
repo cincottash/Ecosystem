@@ -13,23 +13,19 @@ pygame.init()
 
 canvas = pygame.display.set_mode((canvasWidth, canvasHeight))
 
-rabbitList = []
-grassList = []
-rabbitPop = []
-timeStamps = []
+
 
 def main():
 
 	populateCanvas(10, 20)
 
-	while time < 0.1:
+	while time < 0.5:
 		#draw background
 		canvas.fill((255,255,255))
 
 		#draw sprites over background
 		drawSprites()
 
-		#update sprite attributes
 		update()
 
 		rabbitPop.append(len(rabbitList))
@@ -37,11 +33,17 @@ def main():
 
 		#commit changes
 		pygame.display.update()
+
+	updatePlotStuff()
+	
+	
+
+def updatePlotStuff():
 	X = np.array(timeStamps)
 	Y = np.array(rabbitPop)
-	plt.scatter(X,Y)
-	plt.show()
-
+	test = plt.scatter(X,Y)
+	#plt.pause(0.05)
+	plt.show(test)
 
 def populateCanvas(startingRabbitPop, startingGrassPop):
 	currentRabbitPop = 0
@@ -102,7 +104,7 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 				grassList.append(Grass((0,255,0), (x, y)))
 				placed = 1
 				currentGrassPop += 1
-				
+
 def drawSprites():
 	for rabbit in rabbitList:
 		
@@ -115,12 +117,7 @@ def drawSprites():
 	for grass in grassList:
 		pygame.draw.circle(canvas, grass.color, grass.pos, grass.size)
 
-def update():
-	global time
-	time = round(time, 5)
-	print(time)
-
-	#Update all rabbit stuff
+def updateRabbitStuff():
 	for rabbit in rabbitList:
 		rabbit.timeSinceLastFuck += dt
 		#dont let rabbit health drop below 0
@@ -286,8 +283,9 @@ def update():
 		#print("Rabbit hunger %f rabbit health %f" %(rabbit.hunger, rabbit.health))
 
 		if(rabbit.health <= 0):
-			rabbitList.remove(rabbit)
+			rabbitList.remove(rabbit)		
 
+def updateGrassStuff():
 	#Handle grass regrowth
 	if((time*10000.0) % 60.0 == 0 and time > 0.0):
 		print("placing grass at %s" % time)
@@ -319,6 +317,15 @@ def update():
 				grassList.append(Grass((0,255,0), (x, y)))
 				placed = 1
 				print("Placed grass")
+
+def update():
+	global time
+	
+	print(time)
+
+	updateRabbitStuff()
+
+	updateGrassStuff()
 
 	time += dt
 	clock.sleep(.05)
