@@ -16,15 +16,17 @@ def main():
 	populateCanvas(10, 40)
 	
 	drawSprites()
-	while time < 0.01:
-		#draw background
-		canvas.fill((255,255,255))
 
-		#draw sprites over background
+	while time < 0.01:
+		#reset background
+		canvas.fill(WHITE)
+
 		drawSprites()
 
 		update()
+		
 		print(time)
+
 		rabbitPop.append(len(rabbitList))
 		timeStamps.append(time*10000)
 
@@ -33,7 +35,6 @@ def main():
 
 	plotStuff()
 	
-
 def update():
 	global time
 	

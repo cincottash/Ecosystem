@@ -62,7 +62,7 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 			
 			#If still no overlap, we can draw it
 			if(canPlace):
-				grassList.append(Grass((0,255,0), (x, y)))
+				grassList.append(Grass(GREEN, (x, y)))
 				placed = 1
 				currentGrassPop += 1
 
@@ -234,7 +234,6 @@ def updateRabbitStuff():
 		if(rabbit.health <= 0):
 			rabbitList.remove(rabbit)		
 
-
 def updateGrassStuff():
 	#Handle grass regrowth
 	if((time*10000.0) % 60.0 == 0 and time > 0.0):
@@ -264,7 +263,7 @@ def updateGrassStuff():
 			
 			#If still no overlap, we can draw it
 			if(canPlace):
-				grassList.append(Grass((0,255,0), (x, y)))
+				grassList.append(Grass(GREEN, (x, y)))
 				placed = 1
 				print("Placed grass")
 
