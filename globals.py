@@ -7,5 +7,3 @@ dt = 0.00005
 
 rabbitList = []
 grassList = []
-rabbitPop = []
-timeStamps = []
