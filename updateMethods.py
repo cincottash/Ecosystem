@@ -67,7 +67,9 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 				currentGrassPop += 1
 
 def updateRabbitStuff():
+	rabbitSizes = 0
 	for rabbit in rabbitList:
+		rabbitSizes += rabbit.size
 		rabbit.timeSinceLastFuck += dt
 		
 		#Check if rabbit is starving aka the next hunger tick drops hunger leq 0
@@ -81,7 +83,7 @@ def updateRabbitStuff():
 
 				#if it will kill us, remove the rabbit
 				rabbitList.remove(rabbit)
-				#DOnt bother doing other stuff stince we're dead
+				#Dont do other stuff stince we're dead
 				continue
 			else:
 				#otherwise just reduce our health
@@ -248,6 +250,12 @@ def updateRabbitStuff():
 								rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
 								placed = 1
 		#print("Rabbit hunger %f rabbit health %f" %(rabbit.hunger, rabbit.health))
+
+	if(len(rabbitList) == 0):
+		averageRabbitSize.append(0)
+	else:
+		averageRabbitSize.append(float(rabbitSizes)/len(rabbitList))
+	#print(float(rabbitSizes)/len(rabbitList))
 
 def updateGrassStuff(time1):
 	#Handle grass regrowth

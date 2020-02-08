@@ -3,16 +3,27 @@ import matplotlib.pyplot as plt
 from globals import *
 
 def plotStuff():
+
 	X = np.array(timeStamps)
 	Y = np.array(rabbitPop)
 	
-	plt.scatter(X, Y)
-	
-	plt.title('Rabbit Population vs Time')
-	plt.xlabel('Time')
-	plt.ylabel('Rabbit Population')
+	plt.figure()
 
-	plt.ylim(0, 100)
+	plt.subplot(221)
+	plt.scatter(X, Y, s = 3.0)
+	plt.title('Rabbit Population vs Time')
 	plt.xlim(0, maxTime)
+	plt.ylim(0, 75)
+	plt.grid(True)
+
+	X = np.array(timeStamps)
+	Y = np.array(averageRabbitSize)
+	
+	plt.subplot(222)
+	plt.scatter(X, Y, s = 3.0)
+	plt.title('Average Rabbit Size vs Time')
+	plt.xlim(0, maxTime)
+	plt.ylim(6, 21)
+	plt.grid(True)
 	
 	plt.show()
