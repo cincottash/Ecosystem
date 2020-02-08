@@ -4,7 +4,7 @@ canvasHeight = 1000
 global time
 global dt
 global maxTime
-maxTime = 0.15
+maxTime = 0.3
 time = 0.00000
 dt = 0.00005
 
@@ -12,6 +12,7 @@ rabbitList = []
 grassList = []
 
 rabbitPop = []
+averageRabbitPop = []
 timeStamps = []
 
 WHITE = (255,255,255)

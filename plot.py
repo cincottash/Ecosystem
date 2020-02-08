@@ -12,7 +12,7 @@ def plotStuff():
 	plt.xlabel('Time')
 	plt.ylabel('Rabbit Population')
 
-	plt.ylim(0, 40)
+	plt.ylim(0, 100)
 	plt.xlim(0, maxTime)
 	
 	plt.show()
