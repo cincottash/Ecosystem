@@ -30,23 +30,19 @@ def main():
 		rabbitPop.append(len(rabbitList))
 		timeStamps.append(time)
 		
-		print(time)
 
 		#commit changes
 		pygame.display.update()
 
-	#print(len(rabbitPop))
-	#print(len(timeStamps))
 	plotStuff()
 
 	
 def update():
 	global time
 	
-
 	updateRabbitStuff()
 
-	updateGrassStuff()
+	updateGrassStuff(time)
 
 	time += dt
 	clock.sleep(.05)

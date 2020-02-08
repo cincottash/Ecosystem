@@ -15,8 +15,8 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords and a random size
-			x = random.randint(canvasWidth/6, 5*canvasWidth/6)
-			y = random.randint(canvasHeight/6, 5*canvasHeight/6)
+			x = random.randint(int(canvasWidth/6), int(5*canvasWidth/6))
+			y = random.randint(int(canvasHeight/6), int(5*canvasHeight/6))
 			size = random.randint(6, 10)
 
 			#check for overlap of rabbits
@@ -249,17 +249,17 @@ def updateRabbitStuff():
 								placed = 1
 		#print("Rabbit hunger %f rabbit health %f" %(rabbit.hunger, rabbit.health))
 
-				
-
-def updateGrassStuff():
+def updateGrassStuff(time1):
 	#Handle grass regrowth
-	if((time*10000.0) % 60.0 == 0 and time > 0.0):
-		print("placing grass at %s" % time)
+	currentTime = time1
+	print(int(currentTime*10000.0 % 30))
+	if(int(currentTime*10000.0 % 30) == 0 and int(currentTime*10000.0) > 0):
+		print("placing grass at %s" % currentTime)
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
-			x = random.randint(canvasWidth/6, 5*canvasWidth/6)
-			y = random.randint(canvasHeight/6, 5*canvasHeight/6)
+			x = random.randint(int(canvasWidth/6), int(5*canvasWidth/6))
+			y = random.randint(int(canvasHeight/6), int(5*canvasHeight/6))
 
 			#check for overlap of rabbits
 			canPlace = 1
