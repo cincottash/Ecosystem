@@ -303,13 +303,13 @@ def checkForPredators(rabbit):
 			rabbit.pos = (canvasWidth/6, canvasHeight/6)
 		#Possible that is is not within the bounds but y is
 		elif(rabbit.pos[0] + dx  > 5*canvasWidth/6 and rabbit.pos[1] + dy < 5*canvasHeight/6):
-			rabbit.pos = (5*canvasWidth/6, rabbit.pos[1])
+			rabbit.pos = (5*canvasWidth/6, rabbit.pos[1] + dy)
 		#check the other end of the values
 		elif(rabbit.pos[0] + dx  < canvasWidth/6 and rabbit.pos[1] + dy > canvasHeight/6):
-			rabbit.pos = (canvasWidth/6, rabbit.pos[1])
+			rabbit.pos = (canvasWidth/6, rabbit.pos[1] + dy)
 		#Also possible that the x values are within screen range but the y values are not
 		elif(rabbit.pos[0] + dx < 5*canvasWidth/6 and rabbit.pos[1] > 5*canvasHeight/6):
-			rabbit.pos = (rabbit.pos[0], 5*canvasHeight/6)
+			rabbit.pos = (rabbit.pos[0] + dx, 5*canvasHeight/6)
 		#check the other end of values
 		elif(rabbit.pos[0] + dx > canvasWidth/6 and rabbit.pos[1] < canvasHeight/6):
 			rabbit.pos = (rabbit.pos[0] + dx, canvasHeight/6)
