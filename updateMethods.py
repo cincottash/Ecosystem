@@ -130,16 +130,18 @@ def updateRabbitStuff():
 			#if not starving, reduce health
 			rabbit.hunger -= rabbit.size*dt*300
 
+		#TODO: Make rabbits run from foxes
+		if(checkForPredators(rabbit) == False):
 		#If not hungry and havent fucked in a while check for a mate
-		if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 0.01):
-			rabbitSeekMate(rabbit)
-		#Search for food if hungry
-		elif(rabbit.hunger <= 50):
-			# #Search through grass within searchRadius
-			rabbitForage(rabbit)
-		#If not hungry just move randomly
-		else:
-			moveRandomly(rabbit)
+			if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 0.01):
+				rabbitSeekMate(rabbit)
+			#Search for food if hungry
+			elif(rabbit.hunger <= 50):
+				# #Search through grass within searchRadius
+				rabbitForage(rabbit)
+			#If not hungry just move randomly
+			else:
+				moveRandomly(rabbit)
 
 	#divide by zero check
 	try:
@@ -265,6 +267,34 @@ def rabbitForage(rabbit):
 	#If no visible grass, move randomly
 	else:
 		moveRandomly(rabbit)
+
+def checkForPredators(rabbit):
+	visiblePredators = []
+	for fox in foxList:
+		distance = math.sqrt((fox.pos[0] - rabbit.pos[0])**2 + (fox.pos[1] - rabbit.pos[1])**2)
+		#find closest grass within search area
+		if(distance <= rabbit.searchRadius):
+			print("Spotted Fox!!!")
+			visiblePredators.append(fox)
+	if(len(visiblePredators) > 0):
+		#Find the clostest predator to yourself
+		nearestPredator = visiblePredators[0]
+		for predator in visiblePredators: 
+			nearestPredatorDistance = math.sqrt((nearestPredator.pos[0] - rabbit.pos[0])**2 + (nearestPredator.pos[1] - rabbit.pos[1])**2)
+			newDistance = math.sqrt((predator.pos[0] - rabbit.pos[0])**2 + (predator.pos[1] - rabbit.pos[1])**2)
+			if(newDistance < nearestPredatorDistance):
+				nearestPredator = predator
+				nearestPredatorDistance = newDistance
+
+		#Run away from it
+		theta = math.atan2(nearestPredator.pos[1] - rabbit.pos[1], nearestPredator.pos[0] - rabbit.pos[0])
+		#had to scale it up a little with * 1.5
+		dx = rabbit.velocity * math.cos(theta) * -1.5
+		dy = rabbit.velocity * math.sin(theta) * -1.5
+		rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
+		return True
+	else:
+		return False
 
 def rabbitSeekMate(rabbit):
 	#print("searching for mate")
