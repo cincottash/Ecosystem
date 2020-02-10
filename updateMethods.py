@@ -316,3 +316,92 @@ def rabbitSeekMate(rabbit):
 	#If there are visible mates, find the closest one and move towards it
 	else:
 		rabbitFuck(rabbit, visibleMates)
+
+
+def updateFoxStuff():
+	for fox in foxList:
+		
+		fox.timeSinceLastFuck += dt
+		
+		#Check if rabbit is starving aka the next hunger tick drops hunger leq 0
+		if(fox.hunger - fox.size*dt*300 <= 0):
+			#dont let hunger drop below 0 if starving
+			fox.hunger = 0
+			#Since we're starving, check if the next tick of health loss will kill us
+			if(fox.health - fox.size*dt*300 <= 0):
+				#if it will kill us, remove the rabbit
+				foxList.remove(fox)
+				#Dont do other stuff stince we're dead
+				continue
+			else:
+				#otherwise just reduce our health
+				fox.health -= fox.size*dt*300
+		else:
+			#if not starving, reduce health
+			fox.hunger -= fox.size*dt*300
+
+	#If not hungry and havent fucked in a while check for a mate
+		if (fox.hunger > 50 and fox.timeSinceLastFuck > 0.01):
+			#rabbitSeekMate(rabbit)
+			print("Mate check for fox not implemented")
+		#Search for food if hungry
+		elif(fox.hunger <= 50):
+			#Search through grass within searchRadius
+			#rabbitForage(rabbit)
+			foxForage(fox)
+		
+		#If not hungry just move randomly
+		else:
+			moveRandomly(fox)
+
+	#divide by zero check
+	# try:
+	# 	averageRabbitSize.append(float(rabbitSizes)/len(rabbitList))
+	# except ZeroDivisionError:
+	# 	print("WARNING: All rabbits are dead")
+
+def foxForage(fox):
+	#Search through grass within searchRadius
+	visibleRabbits = []
+	for rabbit in rabbitList:
+		#Accounts for circle radius, not just the center coords
+		distance = math.sqrt((rabbit.pos[0] - fox.pos[0])**2 + (rabbit.pos[1] - fox.pos[1])**2)
+		#find closest grass within search area
+		if(distance <= fox.searchRadius):
+			#print("Spotted grass")
+			visibleRabbits.append(rabbit)
+
+	if(len(visibleRabbits) > 0):
+		#rabbitEat(rabbit, visibleGrass)
+		foxEat(fox, visibleRabbits)
+
+	#If no visible grass, move randomly
+	else:
+		moveRandomly(fox)
+
+def foxEat(fox, visibleRabbits):
+	nearestRabbit = visibleRabbits[0]
+	for rabbit in visibleRabbits: 
+		#just start with the closest grass being the first visible one
+		nearestRabbitDistance = math.sqrt((nearestRabbit.pos[0] - fox.pos[0])**2 + (nearestRabbit.pos[1] - fox.pos[1])**2)
+		newDistance = math.sqrt((rabbit.pos[0] - fox.pos[0])**2 + (rabbit.pos[1] - fox.pos[1])**2)
+		if(newDistance < nearestRabbitDistance):
+			nearestRabbit = rabbit
+			nearestRabbitDistance = newDistance
+	
+	#Move towards nearest grass
+	theta = math.atan2(nearestRabbit.pos[1] - fox.pos[1], nearestRabbit.pos[0] - fox.pos[0])
+	#had to scale it up a little with * 1.5
+	dx = fox.velocity * math.cos(theta) * 1.5
+	dy = fox.velocity * math.sin(theta) * 1.5
+
+	fox.pos = (fox.pos[0] + int(dx), fox.pos[1] + int(dy))
+
+	#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
+	if(nearestRabbitDistance < 10):
+		if(fox.hunger + 33.0 > 100.0):	
+			fox.hunger = 100.0
+		else:
+			fox.hunger += 33.0
+		rabbitList.remove(nearestRabbit)
+		print("Reached rabbit")

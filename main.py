@@ -45,6 +45,8 @@ def update():
 
 	updateGrassStuff(time)
 
+	updateFoxStuff()
+
 	time += dt
 	clock.sleep(.05)
 
