@@ -1,10 +1,10 @@
-from enum import Enum
+
 canvasWidth = 1800
 canvasHeight = 1000
 global time
 global dt
 global maxTime
-maxTime = 0.45
+maxTime = 2.0
 time = 0.00000
 dt = 0.00005
 

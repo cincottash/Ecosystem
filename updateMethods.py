@@ -74,13 +74,10 @@ def updateRabbitStuff():
 		
 		#Check if rabbit is starving aka the next hunger tick drops hunger leq 0
 		if(rabbit.hunger - rabbit.size*dt*300 <= 0):
-
 			#dont let hunger drop below 0 if starving
 			rabbit.hunger = 0
-
 			#Since we're starving, check if the next tick of health loss will kill us
 			if(rabbit.health - rabbit.size*dt*300 <= 0):
-
 				#if it will kill us, remove the rabbit
 				rabbitList.remove(rabbit)
 				#Dont do other stuff stince we're dead
@@ -95,11 +92,9 @@ def updateRabbitStuff():
 		#If not hungry and havent fucked in a while check for a mate
 		if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 0.01):
 			#print("searching for mate")
-			
 			visibleMates = []
 			#Check if any potential mates are within your vision
 			for rabbitB in rabbitList:
-				
 				#Only go to mate if they're also looking for a mate
 				if(rabbitB.hunger > 50 and rabbitB.timeSinceLastFuck > 0.01):
 					#Dont check yourself
@@ -111,29 +106,22 @@ def updateRabbitStuff():
 
 			#If no visible mates, move randomly
 			if(len(visibleMates) == 0):
-				placed = 0
 
-				while(placed == 0):
-					#Generate random number to determine the direction we move 
-					signX = random.randint(0, 1)
-					signY = random.randint(0, 1)
+				#Generate random number to determine the direction we move 
+				signX = random.randint(0, 1)
+				signY = random.randint(0, 1)
 
-					if(signX == 0):
-						signX = -1
-					else:
-						signX = 1
+				if(signX == 0):
+					signX = -1
+				else:
+					signX = 1
 
-					if(signY == 0):
-						signY = -1
-					else:
-						signY = 1
-					#Check if desired location is within our canvas limits
-					if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity < 5*canvasWidth/6):
-						if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity > canvasWidth/6):
-							if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity > canvasHeight/6):
-								if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity < 5*canvasHeight/6):
-									rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
-									placed = 1
+				if(signY == 0):
+					signY = -1
+				else:
+					signY = 1
+				rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
+			
 			#If there are visible mates, find the closest one and move towards it
 			else:
 				nearestMate = visibleMates[0]
@@ -197,58 +185,44 @@ def updateRabbitStuff():
 						rabbit.hunger += 33.0
 					grassList.remove(nearestGrass)
 					print("Reached food")
+			
 			#If no visible grass, move randomly
 			else:
-				placed = 0
-
-				while(placed == 0):
-					#Generate random number to determine the direction we move 
-					signX = random.randint(0, 1)
-					signY = random.randint(0, 1)
-
-					if(signX == 0):
-						#print("signX is " + str(signX))
-						signX = -1
-					else:
-						#print("signX is " + str(signX))
-						signX = 1
-
-					if(signY == 0):
-						signY = -1
-					else:
-						signY = 1
-					#Check if desired location is within our canvas limits
-					if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity < 5*canvasWidth/6):
-						if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity > canvasWidth/6):
-							if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity > canvasHeight/6):
-								if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity < 5*canvasHeight/6):
-									rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
-									placed = 1
-		#If not hungry just move randomly
-		else:
-			placed = 0
-
-			while(placed == 0):
 				#Generate random number to determine the direction we move 
 				signX = random.randint(0, 1)
 				signY = random.randint(0, 1)
 
 				if(signX == 0):
+					#print("signX is " + str(signX))
 					signX = -1
 				else:
+					#print("signX is " + str(signX))
 					signX = 1
 
 				if(signY == 0):
 					signY = -1
 				else:
 					signY = 1
-				#Check if desired location is within our canvas limits
-				if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity < 5*canvasWidth/6):
-					if(rabbit.pos[0] + rabbit.size + signX*rabbit.velocity > canvasWidth/6):
-						if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity > canvasHeight/6):
-							if(rabbit.pos[1] + rabbit.size + signY*rabbit.velocity < 5*canvasHeight/6):
-								rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
-								placed = 1
+
+				rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
+		#If not hungry just move randomly
+		else:
+
+			#Generate random number to determine the direction we move 
+			signX = random.randint(0, 1)
+			signY = random.randint(0, 1)
+
+			if(signX == 0):
+				signX = -1
+			else:
+				signX = 1
+
+			if(signY == 0):
+				signY = -1
+			else:
+				signY = 1
+
+			rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
 		#print("Rabbit hunger %f rabbit health %f" %(rabbit.hunger, rabbit.health))
 
 	if(len(rabbitList) == 0):
@@ -292,3 +266,19 @@ def updateGrassStuff(time1):
 				placed = 1
 				print("Placed grass")
 
+def moveRandomly(animal):
+	signX = random.randint(0, 1)
+	signY = random.randint(0, 1)
+
+	if(signX == 0):
+		#print("signX is " + str(signX))
+		signX = -1
+	else:
+		#print("signX is " + str(signX))
+		signX = 1
+
+	if(signY == 0):
+		signY = -1
+	else:
+		signY = 1
+	animal.pos = (animal.pos[0] + signX*animal.velocity, animal.pos[1] + signY*animal.velocity)

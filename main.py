@@ -6,7 +6,7 @@ import time as clock
 from globals import *
 from rabbit import *
 from grass import *
-from plot import *
+from plot import * 
 from draw import *
 from updateMethods import *
 global time
