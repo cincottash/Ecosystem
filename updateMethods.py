@@ -130,7 +130,7 @@ def updateRabbitStuff():
 			#if not starving, reduce health
 			rabbit.hunger -= rabbit.size*dt*300
 
-		#TODO: Make rabbits run from foxes
+		#Prioritize running from foxes over eating and fucking
 		if(checkForPredators(rabbit) == False):
 		#If not hungry and havent fucked in a while check for a mate
 			if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 0.01):
