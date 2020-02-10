@@ -293,7 +293,20 @@ def checkForPredators(rabbit):
 		#had to scale it up a little with * 1.5
 		dx = rabbit.velocity * math.cos(theta) * -1.5
 		dy = rabbit.velocity * math.sin(theta) * -1.5
-		rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
+
+		#check if we're over the screen boundary
+		#TODO: Fix this shit im retarded TUPLES ARE IMMUTABLE DUHHH
+		if(rabbit.pos[0] + dx  > 5*canvasWidth/6):
+			#rabbit.pos[0] = 5*canvasWidth/6
+		elif(rabbit.pos[0] + dx < canvasWidth/6):
+			rabbit.pos[0] = canvasWidth/6
+		elif(rabbit.pos[1] + dy > 5*canvasHeight/6):
+			rabbit.pos[1] = 5*canvasHeight/6
+		elif(rabbit.pos[1] + dy < canvasHeight/6):
+			rabbit.pos[1] = canvasHeight/6
+		else:
+			rabbit.pos = (rabbit.pos[0] + dx, rabbit.pos[1] + dy)
+		
 		return True
 	else:
 		return False
