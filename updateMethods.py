@@ -75,6 +75,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 			#Create a random set of cords
 			x = random.randint(int(canvasWidth/6), int(5*canvasWidth/6))
 			y = random.randint(int(canvasHeight/6), int(5*canvasHeight/6))
+			size = random.randint(10, 14)
 
 			#check for overlap of rabbits
 			canPlace = 1
@@ -102,7 +103,8 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 
 			#If still no overlap, we can draw it
 			if(canPlace):
-				foxList.append(Fox((x, y), 10))
+				#Just give it a size of 10 for now
+				foxList.append(Fox((x, y), size))
 				placed = 1
 				currentFoxPop += 1
 
@@ -244,7 +246,7 @@ def rabbitFuck(rabbit, visibleMates):
 	dy = rabbit.velocity * math.sin(theta) * 1.5
 	rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
 
-	if(int(nearestMateDistance) < 5):
+	if(int(nearestMateDistance) < 10):
 		rabbit.timeSinceLastFuck = 0.0
 		nearestMate.timeSinceLastFuck = 0.0
 		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
@@ -343,7 +345,9 @@ def updateFoxStuff():
 	#If not hungry and havent fucked in a while check for a mate
 		if (fox.hunger > 50 and fox.timeSinceLastFuck > 0.01):
 			#rabbitSeekMate(rabbit)
-			print("Mate check for fox not implemented")
+			print("Looking for mate")
+			
+			foxSeekMate(fox)
 		#Search for food if hungry
 		elif(fox.hunger <= 50):
 			#Search through grass within searchRadius
@@ -399,9 +403,53 @@ def foxEat(fox, visibleRabbits):
 
 	#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
 	if(nearestRabbitDistance < 10):
-		if(fox.hunger + 33.0 > 100.0):	
+		if(fox.hunger + 50.0 > 100.0):	
 			fox.hunger = 100.0
 		else:
-			fox.hunger += 33.0
+			fox.hunger += 50.0
 		rabbitList.remove(nearestRabbit)
 		print("Reached rabbit")
+
+def foxFuck(fox, visibleMates):
+	nearestMate = visibleMates[0]
+	for mate in visibleMates: 
+		nearestMateDistance = math.sqrt((nearestMate.pos[0] - fox.pos[0])**2 + (nearestMate.pos[1] - fox.pos[1])**2)
+		newDistance = math.sqrt((mate.pos[0] - fox.pos[0])**2 + (mate.pos[1] - fox.pos[1])**2)
+		if(newDistance < nearestMateDistance):
+			nearestMate = mate
+			nearestMateDistance = newDistance
+	
+	#Move towards nearest grass
+	theta = math.atan2(nearestMate.pos[1] - fox.pos[1], nearestMate.pos[0] - fox.pos[0])
+	#had to scale it up a little with * 1.5
+	dx = fox.velocity * math.cos(theta) * 1.5
+	dy = fox.velocity * math.sin(theta) * 1.5
+	fox.pos = (fox.pos[0] + int(dx), fox.pos[1] + int(dy))
+
+	if(int(nearestMateDistance) < 10):
+		fox.timeSinceLastFuck = 0.0
+		nearestMate.timeSinceLastFuck = 0.0
+		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
+		foxList.append(Fox(fox.pos, int((fox.size+nearestMate.size)/2)))
+		print("Reached fox mate")
+
+def foxSeekMate(fox):
+	#print("searching for mate")
+	visibleMates = []
+	#Check if any potential mates are within your vision
+	for foxB in foxList:
+		#Only go to mate if they're also looking for a mate
+		if(foxB.hunger > 50 and foxB.timeSinceLastFuck > 0.01):
+			#Dont check yourself
+			if(foxB != fox):
+				distance = math.sqrt((foxB.pos[0] - fox.pos[0])**2 + (foxB.pos[1] - fox.pos[1])**2)
+				if(distance <= fox.searchRadius):
+					#print("See a mate")
+					visibleMates.append(foxB)
+
+	#If no visible mates, move randomly
+	if(len(visibleMates) == 0):
+		moveRandomly(fox)
+	#If there are visible mates, find the closest one and move towards it
+	else:
+		foxFuck(fox, visibleMates)

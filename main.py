@@ -25,7 +25,6 @@ def main():
 		
 		drawSprites()
 
-		
 		print(time)
 
 		rabbitPop.append(len(rabbitList))
