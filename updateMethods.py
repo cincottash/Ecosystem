@@ -5,14 +5,15 @@ import time as clock
 from globals import *
 from rabbit import *
 from grass import *
+from fox import *
 
-def populateCanvas(startingRabbitPop, startingGrassPop):
+def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 	currentRabbitPop = 0
 	currentGrassPop = 0
 	currentFoxPop = 0
 
 	#Populate canvas with rabbits of random size in random loctions, no overlap of rabbits allowed
-	while(currentRabbitPop < startingRabbitPop):
+	while(currentRabbitPop < desiredRabbitPop):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords and a random size
@@ -36,7 +37,7 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 				currentRabbitPop += 1
 
 	#Same thing but for grass, again no overlap of other grass or rabbits
-	while(currentGrassPop < startingGrassPop):
+	while(currentGrassPop < desiredGrassPop):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
@@ -67,6 +68,44 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 				placed = 1
 				currentGrassPop += 1
 	#Same thing but for foxes, again no overlap of other grass, rabbits or foxes
+	
+	while(currentFoxPop < desiredFoxPop):
+		placed = 0
+		while(placed == 0):
+			#Create a random set of cords
+			x = random.randint(int(canvasWidth/6), int(5*canvasWidth/6))
+			y = random.randint(int(canvasHeight/6), int(5*canvasHeight/6))
+
+			#check for overlap of rabbits
+			canPlace = 1
+			for rabbit in rabbitList:
+				#distance formula
+				distance = math.sqrt((rabbit.pos[0]-x)**2 + (rabbit.pos[1]-y)**2)
+				#*2 is a spcaer
+				if(distance <= rabbit.size*2):
+					canPlace = 0
+					break
+
+			#if no overlap with rabbits, check the grasses too
+			if(canPlace):
+				for grass in grassList:
+					distance = math.sqrt((grass.pos[0]-x)**2 + (grass.pos[1]-y)**2)
+					if(distance <= grass.size*2):
+						canPlace = 0
+						break		
+			if(canPlace):
+				for fox in foxList:
+					distance = math.sqrt((grass.pos[0]-x)**2 + (grass.pos[1]-y)**2)
+					if(distance <= fox.size*2):
+						canPlace = 0
+						break
+
+			#If still no overlap, we can draw it
+			if(canPlace):
+				foxList.append(Fox((x, y), 10))
+				placed = 1
+				currentFoxPop += 1
+
 
 def updateRabbitStuff():
 	rabbitSizes = 0

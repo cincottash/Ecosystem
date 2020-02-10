@@ -10,6 +10,7 @@ dt = 0.00005
 
 rabbitList = []
 grassList = []
+foxList = []
 
 rabbitPop = []
 averageRabbitSize = []

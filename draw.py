@@ -23,3 +23,6 @@ def drawSprites():
 	
 	for grass in grassList:
 		pygame.draw.circle(canvas, grass.color, grass.pos, grass.size)
+
+	for fox in foxList:
+		pygame.draw.rect(canvas, BLACK, (fox.pos[0], fox.pos[1], fox.size, fox.size))
