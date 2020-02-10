@@ -359,10 +359,10 @@ def updateFoxStuff():
 			moveRandomly(fox)
 
 	#divide by zero check
-	# try:
-	# 	averageRabbitSize.append(float(rabbitSizes)/len(rabbitList))
-	# except ZeroDivisionError:
-	# 	print("WARNING: All rabbits are dead")
+	try:
+	 	len(foxList)
+	except ZeroDivisionError:
+	 	print("WARNING: All foxes are dead")
 
 def foxForage(fox):
 	#Search through grass within searchRadius
