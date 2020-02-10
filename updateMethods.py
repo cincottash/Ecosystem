@@ -295,26 +295,7 @@ def checkForPredators(rabbit):
 		dy = rabbit.velocity * math.sin(theta) * -1.5
 
 		#check if we're over the screen boundary
-		#If both the x and y values are over (in a corner)
-		if(rabbit.pos[0] + dx  > 5*canvasWidth/6 and rabbit.pos[1] + dy > 5*canvasHeight/6):
-			rabbit.pos = (5*canvasWidth/6, 5*canvasHeight/6)
-		#check the other end of the screen
-		elif(rabbit.pos[0] + dx  < canvasWidth/6 and rabbit.pos[1] + dy < canvasHeight/6):
-			rabbit.pos = (canvasWidth/6, canvasHeight/6)
-		#Possible that is is not within the bounds but y is
-		elif(rabbit.pos[0] + dx  > 5*canvasWidth/6 and rabbit.pos[1] + dy < 5*canvasHeight/6):
-			rabbit.pos = (5*canvasWidth/6, rabbit.pos[1] + dy)
-		#check the other end of the values
-		elif(rabbit.pos[0] + dx  < canvasWidth/6 and rabbit.pos[1] + dy > canvasHeight/6):
-			rabbit.pos = (canvasWidth/6, rabbit.pos[1] + dy)
-		#Also possible that the x values are within screen range but the y values are not
-		elif(rabbit.pos[0] + dx < 5*canvasWidth/6 and rabbit.pos[1] > 5*canvasHeight/6):
-			rabbit.pos = (rabbit.pos[0] + dx, 5*canvasHeight/6)
-		#check the other end of values
-		elif(rabbit.pos[0] + dx > canvasWidth/6 and rabbit.pos[1] < canvasHeight/6):
-			rabbit.pos = (rabbit.pos[0] + dx, canvasHeight/6)
-		else:
-			rabbit.pos = (rabbit.pos[0] + dx, rabbit.pos[1] + dy)
+		boundaryCheck(rabbit, dx, dy)
 		
 		return True
 	else:
@@ -476,3 +457,24 @@ def foxSeekMate(fox):
 	else:
 		foxFuck(fox, visibleMates)
 
+def boundaryCheck(animal, dx, dy):
+	#If both the x and y values are over (in a corner)
+	if(animal.pos[0] + dx  > 5*canvasWidth/6 and animal.pos[1] + dy > 5*canvasHeight/6):
+		animal.pos = (5*canvasWidth/6, 5*canvasHeight/6)
+	#check the other end of the screen
+	elif(animal.pos[0] + dx  < canvasWidth/6 and animal.pos[1] + dy < canvasHeight/6):
+		animal.pos = (canvasWidth/6, canvasHeight/6)
+	#Possible that is is not within the bounds but y is
+	elif(animal.pos[0] + dx  > 5*canvasWidth/6 and animal.pos[1] + dy < 5*canvasHeight/6):
+		animal.pos = (5*canvasWidth/6, animal.pos[1] + dy)
+	#check the other end of the values
+	elif(animal.pos[0] + dx  < canvasWidth/6 and animal.pos[1] + dy > canvasHeight/6):
+		animal.pos = (canvasWidth/6, animal.pos[1] + dy)
+	#Also possible that the x values are within screen range but the y values are not
+	elif(animal.pos[0] + dx < 5*canvasWidth/6 and animal.pos[1] > 5*canvasHeight/6):
+		animal.pos = (animal.pos[0] + dx, 5*canvasHeight/6)
+	#check the other end of values
+	elif(animal.pos[0] + dx > canvasWidth/6 and animal.pos[1] < canvasHeight/6):
+		animal.pos = (animal.pos[0] + dx, canvasHeight/6)
+	else:
+		animal.pos = (animal.pos[0] + dx, animal.pos[1] + dy)
