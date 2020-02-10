@@ -4,7 +4,7 @@ class Fox:
 		self.pos = pos
 		self.size = size
 		
-		self.searchRadius = self.size*40
+		self.searchRadius = self.size*30
 		self.hunger = 80.0
 		self.health = 100.0
 		self.velocity = 40/size	

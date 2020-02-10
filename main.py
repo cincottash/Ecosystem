@@ -13,11 +13,11 @@ global time
 
 def main():
 
-	populateCanvas(12, 40, 10)
+	populateCanvas(12, 40, 5)
 	
 	drawSprites()
 
-	while ((time < maxTime) or len(rabbitList) == 0):
+	while (time < maxTime):
 		#reset background
 		canvas.fill(WHITE)
 

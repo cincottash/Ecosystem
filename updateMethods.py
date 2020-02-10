@@ -453,3 +453,4 @@ def foxSeekMate(fox):
 	#If there are visible mates, find the closest one and move towards it
 	else:
 		foxFuck(fox, visibleMates)
+
