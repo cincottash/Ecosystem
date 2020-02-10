@@ -9,6 +9,7 @@ from grass import *
 def populateCanvas(startingRabbitPop, startingGrassPop):
 	currentRabbitPop = 0
 	currentGrassPop = 0
+	currentFoxPop = 0
 
 	#Populate canvas with rabbits of random size in random loctions, no overlap of rabbits allowed
 	while(currentRabbitPop < startingRabbitPop):
@@ -65,6 +66,7 @@ def populateCanvas(startingRabbitPop, startingGrassPop):
 				grassList.append(Grass(GREEN, (x, y)))
 				placed = 1
 				currentGrassPop += 1
+	#Same thing but for foxes, again no overlap of other grass, rabbits or foxes
 
 def updateRabbitStuff():
 	rabbitSizes = 0
@@ -185,7 +187,6 @@ def rabbitEat(rabbit, visibleGrass):
 		grassList.remove(nearestGrass)
 		print("Reached food")
 
-
 def rabbitFuck(rabbit, visibleMates):
 	nearestMate = visibleMates[0]
 	for mate in visibleMates: 
@@ -225,7 +226,6 @@ def rabbitForage(rabbit):
 	#If no visible grass, move randomly
 	else:
 		moveRandomly(rabbit)
-
 
 def rabbitSeekMate(rabbit):
 	#print("searching for mate")
