@@ -106,55 +106,17 @@ def updateRabbitStuff():
 
 			#If no visible mates, move randomly
 			if(len(visibleMates) == 0):
-
 				moveRandomly(rabbit)
-			
 			#If there are visible mates, find the closest one and move towards it
 			else:
-				nearestMate = visibleMates[0]
-				for mate in visibleMates: 
-					nearestMateDistance = math.sqrt((nearestMate.pos[0] - rabbit.pos[0])**2 + (nearestMate.pos[1] - rabbit.pos[1])**2)
-					newDistance = math.sqrt((mate.pos[0] - rabbit.pos[0])**2 + (mate.pos[1] - rabbit.pos[1])**2)
-					if(newDistance < nearestMateDistance):
-						nearestMate = mate
-						nearestMateDistance = newDistance
-				
-				#Move towards nearest grass
-				theta = math.atan2(nearestMate.pos[1] - rabbit.pos[1], nearestMate.pos[0] - rabbit.pos[0])
-				#had to scale it up a little with * 1.5
-				dx = rabbit.velocity * math.cos(theta) * 1.5
-				dy = rabbit.velocity * math.sin(theta) * 1.5
-				rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
-
-				if(int(nearestMateDistance) == 0):
-					rabbit.timeSinceLastFuck = 0.0
-					nearestMate.timeSinceLastFuck = 0.0
-					#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
-					rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2)))
-					print("Reached mate")
-
+				rabbitFuck(rabbit, visibleMates)
 		#Search for food if hungry
 		elif(rabbit.hunger <= 50):
-			#Search through grass within searchRadius
-			visibleGrass = []
-			for grass in grassList:
-				#Accounts for circle radius, not just the center coords
-				distance = math.sqrt((grass.pos[0] - rabbit.pos[0])**2 + (grass.pos[1] - rabbit.pos[1])**2)-(grass.size + rabbit.size)
-				#find closest grass within search area
-				if(distance <= rabbit.searchRadius):
-					#print("Spotted grass")
-					visibleGrass.append(grass)
-
-			#Find which of the visible grasses is the closest and move towards it
-			if(len(visibleGrass) > 0):
-				rabbitEat(rabbit, visibleGrass)
-			#If no visible grass, move randomly
-			else:
-				moveRandomly(rabbit)
+			# #Search through grass within searchRadius
+			rabbitForage(rabbit)
 		#If not hungry just move randomly
 		else:
 			moveRandomly(rabbit)
-		#print("Rabbit hunger %f rabbit health %f" %(rabbit.hunger, rabbit.health))
 
 	#divide by zero check
 	try:
@@ -240,3 +202,44 @@ def rabbitEat(rabbit, visibleGrass):
 			rabbit.hunger += 33.0
 		grassList.remove(nearestGrass)
 		print("Reached food")
+
+
+def rabbitFuck(rabbit, visibleMates):
+	nearestMate = visibleMates[0]
+	for mate in visibleMates: 
+		nearestMateDistance = math.sqrt((nearestMate.pos[0] - rabbit.pos[0])**2 + (nearestMate.pos[1] - rabbit.pos[1])**2)
+		newDistance = math.sqrt((mate.pos[0] - rabbit.pos[0])**2 + (mate.pos[1] - rabbit.pos[1])**2)
+		if(newDistance < nearestMateDistance):
+			nearestMate = mate
+			nearestMateDistance = newDistance
+	
+	#Move towards nearest grass
+	theta = math.atan2(nearestMate.pos[1] - rabbit.pos[1], nearestMate.pos[0] - rabbit.pos[0])
+	#had to scale it up a little with * 1.5
+	dx = rabbit.velocity * math.cos(theta) * 1.5
+	dy = rabbit.velocity * math.sin(theta) * 1.5
+	rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
+
+	if(int(nearestMateDistance) < 5):
+		rabbit.timeSinceLastFuck = 0.0
+		nearestMate.timeSinceLastFuck = 0.0
+		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
+		rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2)))
+		print("Reached mate")
+
+def rabbitForage(rabbit):
+	#Search through grass within searchRadius
+	visibleGrass = []
+	for grass in grassList:
+		#Accounts for circle radius, not just the center coords
+		distance = math.sqrt((grass.pos[0] - rabbit.pos[0])**2 + (grass.pos[1] - rabbit.pos[1])**2)-(grass.size + rabbit.size)
+		#find closest grass within search area
+		if(distance <= rabbit.searchRadius):
+			#print("Spotted grass")
+			visibleGrass.append(grass)
+
+	if(len(visibleGrass) > 0):
+		rabbitEat(rabbit, visibleGrass)
+	#If no visible grass, move randomly
+	else:
+		moveRandomly(rabbit)
