@@ -10,7 +10,7 @@ def plotStuff():
 	plt.figure()
 
 	plt.subplot(221)
-	plt.scatter(X, Y, s = 3.0)
+	plt.scatter(X, Y, s = 2.0)
 	plt.title('Rabbit Population vs Time')
 	plt.xlim(0, maxTime)
 	plt.ylim(0, 75)

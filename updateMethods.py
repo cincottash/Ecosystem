@@ -91,25 +91,7 @@ def updateRabbitStuff():
 
 		#If not hungry and havent fucked in a while check for a mate
 		if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 0.01):
-			#print("searching for mate")
-			visibleMates = []
-			#Check if any potential mates are within your vision
-			for rabbitB in rabbitList:
-				#Only go to mate if they're also looking for a mate
-				if(rabbitB.hunger > 50 and rabbitB.timeSinceLastFuck > 0.01):
-					#Dont check yourself
-					if(rabbitB != rabbit):
-						distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)
-						if(distance <= rabbit.searchRadius):
-							#print("See a mate")
-							visibleMates.append(rabbitB)
-
-			#If no visible mates, move randomly
-			if(len(visibleMates) == 0):
-				moveRandomly(rabbit)
-			#If there are visible mates, find the closest one and move towards it
-			else:
-				rabbitFuck(rabbit, visibleMates)
+			rabbitSeekMate(rabbit)
 		#Search for food if hungry
 		elif(rabbit.hunger <= 50):
 			# #Search through grass within searchRadius
@@ -243,3 +225,25 @@ def rabbitForage(rabbit):
 	#If no visible grass, move randomly
 	else:
 		moveRandomly(rabbit)
+
+
+def rabbitSeekMate(rabbit):
+	#print("searching for mate")
+	visibleMates = []
+	#Check if any potential mates are within your vision
+	for rabbitB in rabbitList:
+		#Only go to mate if they're also looking for a mate
+		if(rabbitB.hunger > 50 and rabbitB.timeSinceLastFuck > 0.01):
+			#Dont check yourself
+			if(rabbitB != rabbit):
+				distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)
+				if(distance <= rabbit.searchRadius):
+					#print("See a mate")
+					visibleMates.append(rabbitB)
+
+	#If no visible mates, move randomly
+	if(len(visibleMates) == 0):
+		moveRandomly(rabbit)
+	#If there are visible mates, find the closest one and move towards it
+	else:
+		rabbitFuck(rabbit, visibleMates)

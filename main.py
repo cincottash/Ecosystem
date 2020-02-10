@@ -29,9 +29,9 @@ def main():
 		print(time)
 
 		rabbitPop.append(len(rabbitList))
+		
 		timeStamps.append(time)
 		
-
 		#commit changes
 		pygame.display.update()
 
