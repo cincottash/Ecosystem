@@ -13,7 +13,7 @@ global time
 
 def main():
 
-	populateCanvas(12, 40, 5)
+	populateCanvas(12, 40, 0)
 	
 	drawSprites()
 
