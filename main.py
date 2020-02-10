@@ -17,7 +17,7 @@ def main():
 	
 	drawSprites()
 
-	while time < maxTime:
+	while ((time < maxTime) or len(rabbitList) == 0):
 		#reset background
 		canvas.fill(WHITE)
 

@@ -107,20 +107,7 @@ def updateRabbitStuff():
 			#If no visible mates, move randomly
 			if(len(visibleMates) == 0):
 
-				#Generate random number to determine the direction we move 
-				signX = random.randint(0, 1)
-				signY = random.randint(0, 1)
-
-				if(signX == 0):
-					signX = -1
-				else:
-					signX = 1
-
-				if(signY == 0):
-					signY = -1
-				else:
-					signY = 1
-				rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
+				moveRandomly(rabbit)
 			
 			#If there are visible mates, find the closest one and move towards it
 			else:
@@ -142,7 +129,7 @@ def updateRabbitStuff():
 				if(int(nearestMateDistance) == 0):
 					rabbit.timeSinceLastFuck = 0.0
 					nearestMate.timeSinceLastFuck = 0.0
-					#Make them have sex and spawn a new rabbit by passing averaging the stats of the parental rabbits
+					#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
 					rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2)))
 					print("Reached mate")
 
@@ -160,76 +147,20 @@ def updateRabbitStuff():
 
 			#Find which of the visible grasses is the closest and move towards it
 			if(len(visibleGrass) > 0):
-				nearestGrass = visibleGrass[0]
-				for grass in visibleGrass: 
-					#just start with the closest grass being the first visible one
-					nearestGrassDistance = math.sqrt((nearestGrass.pos[0] - rabbit.pos[0])**2 + (nearestGrass.pos[1] - rabbit.pos[1])**2)
-					newDistance = math.sqrt((grass.pos[0] - rabbit.pos[0])**2 + (grass.pos[1] - rabbit.pos[1])**2)
-					if(newDistance < nearestGrassDistance):
-						nearestGrass = grass
-						nearestGrassDistance = newDistance
-				
-				#Move towards nearest grass
-				theta = math.atan2(nearestGrass.pos[1] - rabbit.pos[1], nearestGrass.pos[0] - rabbit.pos[0])
-				#had to scale it up a little with * 1.5
-				dx = rabbit.velocity * math.cos(theta) * 1.5
-				dy = rabbit.velocity * math.sin(theta) * 1.5
-
-				rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
-
-				#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
-				if(nearestGrassDistance < 5):
-					if(rabbit.hunger + 33.0 >= 100.0):	
-						rabbit.hunger = 100.0
-					else:
-						rabbit.hunger += 33.0
-					grassList.remove(nearestGrass)
-					print("Reached food")
-			
+				rabbitEat(rabbit, visibleGrass)
 			#If no visible grass, move randomly
 			else:
-				#Generate random number to determine the direction we move 
-				signX = random.randint(0, 1)
-				signY = random.randint(0, 1)
-
-				if(signX == 0):
-					#print("signX is " + str(signX))
-					signX = -1
-				else:
-					#print("signX is " + str(signX))
-					signX = 1
-
-				if(signY == 0):
-					signY = -1
-				else:
-					signY = 1
-
-				rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
+				moveRandomly(rabbit)
 		#If not hungry just move randomly
 		else:
-
-			#Generate random number to determine the direction we move 
-			signX = random.randint(0, 1)
-			signY = random.randint(0, 1)
-
-			if(signX == 0):
-				signX = -1
-			else:
-				signX = 1
-
-			if(signY == 0):
-				signY = -1
-			else:
-				signY = 1
-
-			rabbit.pos = (rabbit.pos[0] + signX*rabbit.velocity, rabbit.pos[1] + signY*rabbit.velocity)
+			moveRandomly(rabbit)
 		#print("Rabbit hunger %f rabbit health %f" %(rabbit.hunger, rabbit.health))
 
-	if(len(rabbitList) == 0):
-		averageRabbitSize.append(0)
-	else:
+	#divide by zero check
+	try:
 		averageRabbitSize.append(float(rabbitSizes)/len(rabbitList))
-	#print(float(rabbitSizes)/len(rabbitList))
+	except ZeroDivisionError:
+		print("WARNING: All rabbits are dead")
 
 def updateGrassStuff(time1):
 	#Handle grass regrowth
@@ -282,3 +213,30 @@ def moveRandomly(animal):
 	else:
 		signY = 1
 	animal.pos = (animal.pos[0] + signX*animal.velocity, animal.pos[1] + signY*animal.velocity)
+
+def rabbitEat(rabbit, visibleGrass):
+	nearestGrass = visibleGrass[0]
+	for grass in visibleGrass: 
+		#just start with the closest grass being the first visible one
+		nearestGrassDistance = math.sqrt((nearestGrass.pos[0] - rabbit.pos[0])**2 + (nearestGrass.pos[1] - rabbit.pos[1])**2)
+		newDistance = math.sqrt((grass.pos[0] - rabbit.pos[0])**2 + (grass.pos[1] - rabbit.pos[1])**2)
+		if(newDistance < nearestGrassDistance):
+			nearestGrass = grass
+			nearestGrassDistance = newDistance
+	
+	#Move towards nearest grass
+	theta = math.atan2(nearestGrass.pos[1] - rabbit.pos[1], nearestGrass.pos[0] - rabbit.pos[0])
+	#had to scale it up a little with * 1.5
+	dx = rabbit.velocity * math.cos(theta) * 1.5
+	dy = rabbit.velocity * math.sin(theta) * 1.5
+
+	rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
+
+	#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
+	if(nearestGrassDistance < 5):
+		if(rabbit.hunger + 33.0 > 100.0):	
+			rabbit.hunger = 100.0
+		else:
+			rabbit.hunger += 33.0
+		grassList.remove(nearestGrass)
+		print("Reached food")
