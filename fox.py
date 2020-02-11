@@ -6,6 +6,6 @@ class Fox:
 		
 		self.searchRadius = self.size*25
 		self.hunger = 80.0
-		self.health = 100.0
+		self.health = 50.0
 		self.velocity = 30/size	
 		self.timeSinceLastFuck = 0.0

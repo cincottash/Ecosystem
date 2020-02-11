@@ -459,22 +459,26 @@ def foxSeekMate(fox):
 
 def boundaryCheck(animal, dx, dy):
 	#If both the x and y values are over (in a corner)
-	if(animal.pos[0] + dx  > 5*canvasWidth/6 and animal.pos[1] + dy > 5*canvasHeight/6):
-		animal.pos = (5*canvasWidth/6, 5*canvasHeight/6)
+	# if(animal.pos[0] + dx  > maxCanvasWidth and animal.pos[1] + dy > maxCanvasHeight):
+	# 	animal.pos = (5*canvasWidth/6, 5*canvasHeight/6)
 	#check the other end of the screen
-	elif(animal.pos[0] + dx  < canvasWidth/6 and animal.pos[1] + dy < canvasHeight/6):
-		animal.pos = (canvasWidth/6, canvasHeight/6)
+	# if(animal.pos[0] + dx  < minCanvasWidth and animal.pos[1] + dy < minCanvasHeight):
+	# 	animal.pos = (minCanvasWidth, minCanvasHeight)
 	#Possible that is is not within the bounds but y is
-	elif(animal.pos[0] + dx  > 5*canvasWidth/6 and animal.pos[1] + dy < 5*canvasHeight/6):
-		animal.pos = (5*canvasWidth/6, animal.pos[1] + dy)
+	if(animal.pos[0] + dx  > maxCanvasWidth and (maxCanvasHeight < animal.pos[1] + dy < maxCanvasHeight)):
+		animal.pos = (maxCanvasWidth, animal.pos[1] + animal.velocity*-1.5)
 	#check the other end of the values
-	elif(animal.pos[0] + dx  < canvasWidth/6 and animal.pos[1] + dy > canvasHeight/6):
-		animal.pos = (canvasWidth/6, animal.pos[1] + dy)
+	elif(animal.pos[0] + dx  < minCanvasWidth and (minCanvasHeight < animal.pos[1] + dy < maxCanvasHeight)):
+		animal.pos = (minCanvasWidth, animal.pos[1] + animal.velocity*-1.5)
 	#Also possible that the x values are within screen range but the y values are not
-	elif(animal.pos[0] + dx < 5*canvasWidth/6 and animal.pos[1] > 5*canvasHeight/6):
-		animal.pos = (animal.pos[0] + dx, 5*canvasHeight/6)
+	elif(minCanvasWidth < animal.pos[0] + dx < maxCanvasWidth and (animal.pos[1] + dy > maxCanvasHeight)):
+		animal.pos = (animal.pos[0] + animal.velocity*-1.5, maxCanvasHeight)
 	#check the other end of values
-	elif(animal.pos[0] + dx > canvasWidth/6 and animal.pos[1] < canvasHeight/6):
-		animal.pos = (animal.pos[0] + dx, canvasHeight/6)
+	elif(minCanvasWidth < animal.pos[0] + dx < maxCanvasWidth and (animal.pos[1] + dy < minCanvasHeight)):
+		animal.pos = (animal.pos[0] + animal.velocity*-1.5, minCanvasHeight)
+	#Currently they dont move when in a corner
+	elif(animal.pos[0] + dx > maxCanvasWidth or animal.pos[0] + dx < minCanvasWidth):
+		if(animal.pos[1] + dy > maxCanvasHeight or animal.pos[1] + dy < minCanvasHeight):
+			animal.pos = (animal.pos[0], animal.pos[1])
 	else:
 		animal.pos = (animal.pos[0] + dx, animal.pos[1] + dy)
