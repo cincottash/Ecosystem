@@ -457,13 +457,9 @@ def foxSeekMate(fox):
 	else:
 		foxFuck(fox, visibleMates)
 
+#THIS GETS STUCK WHEN IN CORNER OR RIGHT SIDE OF SCREEN
 def boundaryCheck(animal, dx, dy):
-	#If both the x and y values are over (in a corner)
-	# if(animal.pos[0] + dx  > maxCanvasWidth and animal.pos[1] + dy > maxCanvasHeight):
-	# 	animal.pos = (5*canvasWidth/6, 5*canvasHeight/6)
-	#check the other end of the screen
-	# if(animal.pos[0] + dx  < minCanvasWidth and animal.pos[1] + dy < minCanvasHeight):
-	# 	animal.pos = (minCanvasWidth, minCanvasHeight)
+	
 	#Possible that is is not within the bounds but y is
 	if(animal.pos[0] + dx  > maxCanvasWidth and (maxCanvasHeight < animal.pos[1] + dy < maxCanvasHeight)):
 		animal.pos = (maxCanvasWidth, animal.pos[1] + animal.velocity*-1.5)

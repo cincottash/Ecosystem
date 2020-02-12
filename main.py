@@ -2,6 +2,7 @@ import pygame
 import random
 import math
 import time as clock
+import sys
 
 from globals import *
 from rabbit import *
@@ -13,7 +14,11 @@ global time
 
 def main():
 
-	populateCanvas(12, 40, 10)
+	intialRabbitPop = int(sys.argv[1])
+	intialGrassPop = int(sys.argv[2])
+	intialFoxPop = int(sys.argv[3])
+
+	populateCanvas(intialRabbitPop, intialGrassPop, intialFoxPop)
 	
 	drawSprites()
 
