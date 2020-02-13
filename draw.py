@@ -25,17 +25,17 @@ def drawSprites():
 		pygame.draw.circle(canvas, grass.color, grass.pos, grass.size)
 
 	for fox in foxList:
-		if(rabbit.hunger == 0.0):
-			pygame.draw.circle(canvas, BLACK, (int(rabbit.pos[0]), int(rabbit.pos[1])), rabbit.size)
+		if(fox.hunger == 0.0):
+			pygame.draw.rect(canvas, BLACK, (fox.pos[0], fox.pos[1], fox.size, fox.size))
 		#if just hungry, completly red
-		elif(rabbit.hunger < 50):
+		elif(fox.hunger < 50):
 			pygame.draw.rect(canvas, RED, (fox.pos[0], fox.pos[1], fox.size, fox.size))
 		#Not hungry
 		else:
-			red = int(255 - (((rabbit.hunger-50)/50)*255))
+			red = int(255 - (((fox.hunger-50)/50)*255))
 			green = int(0)
-			blue = int(((rabbit.hunger-50)/50)*255)
-			pygame.draw.rect(canvas, (red, blue, green), (fox.pos[0], fox.pos[1], fox.size, fox.size))
+			blue = int(((fox.hunger-50)/50)*255)
+			pygame.draw.rect(canvas, (red, green, blue), (fox.pos[0], fox.pos[1], fox.size, fox.size))
 			
 
 

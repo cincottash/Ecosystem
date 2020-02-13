@@ -37,12 +37,13 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 				currentRabbitPop += 1
 
 	#Same thing but for grass, again no overlap of other grass or rabbits
+	#TODO: Make it spawn in a circle and not a rectangle
 	while(currentGrassPop < desiredGrassPop):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
-			x = random.randint(int(canvasWidth/6), int(5*canvasWidth/6))
-			y = random.randint(int(canvasHeight/6), int(5*canvasHeight/6))
+			x = random.randint(canvasWidth/6, 5*canvasWidth/6)
+			y = random.randint(canvasHeight/6, 5*canvasHeight/6)
 
 			#check for overlap of rabbits
 			canPlace = 1
@@ -73,8 +74,8 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
-			x = random.randint(int(canvasWidth/6), int(5*canvasWidth/6))
-			y = random.randint(int(canvasHeight/6), int(5*canvasHeight/6))
+			x = random.randint(canvasWidth/6, 5*canvasWidth/6)
+			y = random.randint(canvasHeight/6, 5*canvasHeight/6)
 			size = random.randint(10, 14)
 
 			#check for overlap of rabbits
@@ -147,7 +148,7 @@ def updateRabbitStuff():
 
 	#divide by zero check
 	try:
-		averageRabbitSize.append(float(rabbitSizes)/len(rabbitList))
+		averageRabbitSize.append(rabbitSizes/len(rabbitList))
 	except ZeroDivisionError:
 		print("WARNING: All rabbits are dead")
 
@@ -160,8 +161,8 @@ def updateGrassStuff(time1):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
-			x = random.randint(int(canvasWidth/6), int(5*canvasWidth/6))
-			y = random.randint(int(canvasHeight/6), int(5*canvasHeight/6))
+			x = random.randint(canvasWidth/6, 5*canvasWidth/6)
+			y = random.randint(canvasHeight/6, 5*canvasHeight/6)
 
 			#check for overlap of rabbits
 			canPlace = 1
