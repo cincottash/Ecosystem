@@ -17,8 +17,8 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords and a random size
-			x = random.randint(int(canvasWidth/6), int(5*canvasWidth/6))
-			y = random.randint(int(canvasHeight/6), int(5*canvasHeight/6))
+			x = random.randint(-spawnRadius, spawnRadius)+canvasWidth/2
+			y = random.randint(-spawnRadius, spawnRadius)+canvasHeight/2
 			size = random.randint(6, 10)
 
 			#check for overlap of rabbits
@@ -30,6 +30,10 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 				if(distance <= rabbit.size+size):
 					canPlace = 0
 					break	
+
+			if(math.sqrt(int(x-canvasWidth/2)**2 + int(y-canvasHeight/2)**2) > spawnRadius):
+				canPlace = 0
+			
 			#If no overlap, we can draw it
 			if(canPlace):
 				rabbitList.append(Rabbit((x, y), size))
@@ -208,6 +212,8 @@ def moveRandomly(animal):
 		signY = -1
 	else:
 		signY = 1
+
+	#Should make a random angle as well
 	animal.pos = (animal.pos[0] + signX*animal.velocity, animal.pos[1] + signY*animal.velocity)
 
 def rabbitEat(rabbit, visibleGrass):
