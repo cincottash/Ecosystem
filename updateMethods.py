@@ -69,7 +69,6 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 			if(math.sqrt(int(x-canvasWidth/2)**2 + int(y-canvasHeight/2)**2) > spawnRadius):
 				canPlace = 0
 
-
 			#If still no overlap and within the spawnRadius, we can draw it
 			if(canPlace):
 				grassList.append(Grass(GREEN, (x, y)))
@@ -81,8 +80,8 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
-			x = random.randint(canvasWidth/6, 5*canvasWidth/6)
-			y = random.randint(canvasHeight/6, 5*canvasHeight/6)
+			x = random.randint(-spawnRadius, spawnRadius)+canvasWidth/2
+			y = random.randint(-spawnRadius, spawnRadius)+canvasHeight/2
 			size = random.randint(10, 14)
 
 			#check for overlap of rabbits
@@ -109,6 +108,9 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 						canPlace = 0
 						break
 
+			if(math.sqrt(int(x-canvasWidth/2)**2 + int(y-canvasHeight/2)**2) > spawnRadius):
+				canPlace = 0
+				
 			#If still no overlap, we can draw it
 			if(canPlace):
 				#Just give it a size of 10 for now
