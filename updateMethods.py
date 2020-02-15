@@ -38,12 +38,14 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 
 	#Same thing but for grass, again no overlap of other grass or rabbits
 	#TODO: Make it spawn in a circle and not a rectangle
+	#IK WHY ITS WRONG, 0,0 IS NOT THE MIDDLE OF THE SCREEN, ITS QUADRANT 2
 	while(currentGrassPop < desiredGrassPop):
 		placed = 0
+		radius = 200
 		while(placed == 0):
 			#Create a random set of cords
-			x = random.randint(canvasWidth/6, 5*canvasWidth/6)
-			y = random.randint(canvasHeight/6, 5*canvasHeight/6)
+			x = random.randint(-radius, radius)+canvasWidth/2
+			y = random.randint(-radius, radius)+canvasHeight/2
 
 			#check for overlap of rabbits
 			canPlace = 1
@@ -51,7 +53,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 				#distance formula
 				distance = math.sqrt((rabbit.pos[0]-x)**2 + (rabbit.pos[1]-y)**2)
 				#8 is the grass size
-				if(distance <= rabbit.size+8):
+				if(distance <= rabbit.size*2):
 					canPlace = 0
 					break
 
@@ -63,7 +65,14 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 						canPlace = 0
 						break		
 			
-			#If still no overlap, we can draw it
+			#THINK THIS IS WRONG
+			if(math.sqrt(int(x-canvasWidth/2)**2 + int(y-canvasHeight/2)**2) > radius):
+				canPlace = 0
+				print("Shouldn't place")
+
+			#print(math.sqrt(int(x)**2 + int(y)**2))
+
+			#If still no overlap and within the radius, we can draw it
 			if(canPlace):
 				grassList.append(Grass(GREEN, (x, y)))
 				placed = 1

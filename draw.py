@@ -34,7 +34,7 @@ def drawSprites():
 		else:
 			red = int(255 - (((fox.hunger-50)/50)*255))
 			green = int(0)
-			blue = int(((fox.hunger-50)/50)*255)
+			blue = ((fox.hunger-50)/50)*255
 			pygame.draw.rect(canvas, (red, green, blue), (fox.pos[0], fox.pos[1], fox.size, fox.size))
 			
 
