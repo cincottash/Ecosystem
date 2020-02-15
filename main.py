@@ -19,8 +19,6 @@ def main():
 	intialFoxPop = int(sys.argv[3])
 
 	populateCanvas(intialRabbitPop, intialGrassPop, intialFoxPop)
-	
-	#drawSprites()
 
 	while (time < maxTime):
 		#reset background

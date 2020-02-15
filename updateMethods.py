@@ -156,10 +156,10 @@ def updateRabbitStuff():
 				moveRandomly(rabbit)
 
 	#divide by zero check
-	# try:
-	# 	averageRabbitSize.append(rabbitSizes/len(rabbitList))
-	# except ZeroDivisionError:
-	# 	print("WARNING: All rabbits are dead")
+	try:
+		averageRabbitSize.append(rabbitSizes/len(rabbitList))
+	except ZeroDivisionError:
+		print("WARNING: All rabbits are dead")
 
 def updateGrassStuff(time1):
 	#Handle grass regrowth
@@ -214,8 +214,11 @@ def moveRandomly(animal):
 		signY = -1
 	else:
 		signY = 1
+	#theta = random.randint(0, 360)
+	dx = signX*animal.velocity
+	dy = signY*animal.velocity
+	boundaryCheck(animal, dx, dy)
 
-	#Should make a random angle as well
 	animal.pos = (animal.pos[0] + signX*animal.velocity, animal.pos[1] + signY*animal.velocity)
 
 def rabbitEat(rabbit, visibleGrass):
@@ -291,7 +294,7 @@ def checkForPredators(rabbit):
 		distance = math.sqrt((fox.pos[0] - rabbit.pos[0])**2 + (fox.pos[1] - rabbit.pos[1])**2)
 		#find closest grass within search area
 		if(distance <= rabbit.searchRadius):
-			print("Spotted Fox!!!")
+			#print("Spotted Fox!!!")
 			visiblePredators.append(fox)
 	if(len(visiblePredators) > 0):
 		#Find the clostest predator to yourself
@@ -468,15 +471,26 @@ def foxSeekMate(fox):
 	#If no visible mates, move randomly
 	if(len(visibleMates) == 0):
 		moveRandomly(fox)
+
+		#Run away from it
+		# theta = math.atan2(nearestPredator.pos[1] - rabbit.pos[1], nearestPredator.pos[0] - rabbit.pos[0])
+		# #had to scale it up a little with * 1.5
+		# dx = rabbit.velocity * math.cos(theta) * -1.5
+		# dy = rabbit.velocity * math.sin(theta) * -1.5
+
+		#check if we're over the screen boundary
+		# boundaryCheck(rabbit, dx, dy)
+
+		#boundaryCheck(fox, dx, dy)
 	#If there are visible mates, find the closest one and move towards it
 	else:
 		foxFuck(fox, visibleMates)
 
-#THIS GETS STUCK WHEN IN CORNER OR RIGHT SIDE OF SCREEN
 def boundaryCheck(animal, dx, dy):
 	
 	x = animal.pos[0]
 	y = animal.pos[1]
+
 	#If not in range
 	if(math.sqrt((x-canvasWidth/2+dx)**2 + (y-canvasHeight/2)**2+dy) > spawnRadius):
 		#Try moving in each cardinal direction
@@ -492,8 +506,5 @@ def boundaryCheck(animal, dx, dy):
 		#increase y leave x
 		elif(math.sqrt((x-canvasWidth/2)**2 + (y-canvasHeight/2+animal.velocity*1.5)**2) <= spawnRadius):
 			animal.pos = (x, y+animal.velocity*1.5)
-		#print("not in range")
-
-	#else in range
 	else:
 		animal.pos = (animal.pos[0] + dx, animal.pos[1] + dy)

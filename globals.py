@@ -1,3 +1,6 @@
+global time
+global dt
+global maxTime
 
 canvasWidth = 1800
 canvasHeight = 1000
@@ -7,9 +10,7 @@ minCanvasWidth = canvasWidth/6
 
 maxCanvasHeight = 5*canvasHeight/6
 minCanvasHeight = canvasHeight/6
-global time
-global dt
-global maxTime
+
 maxTime = 2.0
 time = 0.00000
 dt = 0.00005
