@@ -478,19 +478,20 @@ def boundaryCheck(animal, dx, dy):
 	y = animal.pos[1]
 
 	#If not in range
-	if(math.sqrt((x-canvasWidth/2+dx)**2 + (y-canvasHeight/2)**2+dy) > spawnRadius):
+	#TODO: Pick a better order to do this, sometimes gets stuck in loops
+	if(math.sqrt((x-canvasWidth/2+dx)**2 + (y-canvasHeight/2+dy)**2) > spawnRadius):
 		#Try moving in each cardinal direction
 		#reduce x leave y
 		if(math.sqrt((x-canvasWidth/2-animal.velocity*1.5)**2 + (y-canvasHeight/2)**2) <= spawnRadius):
-			animal.pos = (x-animal.velocity*3, y)
+			animal.pos = (x-animal.velocity*1.5, y)
 		#increase x leave y
 		elif(math.sqrt((x-canvasWidth/2+animal.velocity*1.5)**2 + (y-canvasHeight/2)**2) <= spawnRadius):
-			animal.pos = (x+animal.velocity*3, y)
+			animal.pos = (x+animal.velocity*1.5, y)
 		#decrease y leave x
 		elif(math.sqrt((x-canvasWidth/2)**2 + (y-canvasHeight/2-animal.velocity*1.5)**2) <= spawnRadius):
-			animal.pos = (x, y-animal.velocity*3)
+			animal.pos = (x, y-animal.velocity*1.5)
 		#increase y leave x
 		elif(math.sqrt((x-canvasWidth/2)**2 + (y-canvasHeight/2+animal.velocity*1.5)**2) <= spawnRadius):
-			animal.pos = (x, y+animal.velocity*3)
+			animal.pos = (x, y+animal.velocity*1.5)
 	else:
 		animal.pos = (animal.pos[0] + dx, animal.pos[1] + dy)
