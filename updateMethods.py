@@ -110,7 +110,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 
 			if(math.sqrt(int(x-canvasWidth/2)**2 + int(y-canvasHeight/2)**2) > spawnRadius):
 				canPlace = 0
-				
+
 			#If still no overlap, we can draw it
 			if(canPlace):
 				#Just give it a size of 10 for now
@@ -149,7 +149,7 @@ def updateRabbitStuff():
 				rabbitSeekMate(rabbit)
 			#Search for food if hungry
 			elif(rabbit.hunger <= 50):
-				# #Search through grass within searchspawnRadius
+				# #Search through grass within searchRadius
 				rabbitForage(rabbit)
 			#If not hungry just move randomly
 			else:
@@ -269,13 +269,13 @@ def rabbitFuck(rabbit, visibleMates):
 		print("Reached mate")
 
 def rabbitForage(rabbit):
-	#Search through grass within searchspawnRadius
+	#Search through grass within searchRadius
 	visibleGrass = []
 	for grass in grassList:
 		#Accounts for circle spawnRadius, not just the center coords
 		distance = math.sqrt((grass.pos[0] - rabbit.pos[0])**2 + (grass.pos[1] - rabbit.pos[1])**2)-(grass.size + rabbit.size)
 		#find closest grass within search area
-		if(distance <= rabbit.searchspawnRadius):
+		if(distance <= rabbit.searchRadius):
 			#print("Spotted grass")
 			visibleGrass.append(grass)
 
@@ -290,7 +290,7 @@ def checkForPredators(rabbit):
 	for fox in foxList:
 		distance = math.sqrt((fox.pos[0] - rabbit.pos[0])**2 + (fox.pos[1] - rabbit.pos[1])**2)
 		#find closest grass within search area
-		if(distance <= rabbit.searchspawnRadius):
+		if(distance <= rabbit.searchRadius):
 			print("Spotted Fox!!!")
 			visiblePredators.append(fox)
 	if(len(visiblePredators) > 0):
@@ -326,7 +326,7 @@ def rabbitSeekMate(rabbit):
 			#Dont check yourself
 			if(rabbitB != rabbit):
 				distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)
-				if(distance <= rabbit.searchspawnRadius):
+				if(distance <= rabbit.searchRadius):
 					#print("See a mate")
 					visibleMates.append(rabbitB)
 
@@ -368,7 +368,7 @@ def updateFoxStuff():
 			foxSeekMate(fox)
 		#Search for food if hungry
 		elif(fox.hunger <= 50):
-			#Search through grass within searchspawnRadius
+			#Search through grass within searchRadius
 			#rabbitForage(rabbit)
 			foxForage(fox)
 		
@@ -383,13 +383,13 @@ def updateFoxStuff():
 	 	print("WARNING: All foxes are dead")
 
 def foxForage(fox):
-	#Search through grass within searchspawnRadius
+	#Search through grass within searchRadius
 	visibleRabbits = []
 	for rabbit in rabbitList:
 		#Accounts for circle spawnRadius, not just the center coords
 		distance = math.sqrt((rabbit.pos[0] - fox.pos[0])**2 + (rabbit.pos[1] - fox.pos[1])**2)
 		#find closest grass within search area
-		if(distance <= fox.searchspawnRadius):
+		if(distance <= fox.searchRadius):
 			#print("Spotted grass")
 			visibleRabbits.append(rabbit)
 
@@ -461,7 +461,7 @@ def foxSeekMate(fox):
 			#Dont check yourself
 			if(foxB != fox):
 				distance = math.sqrt((foxB.pos[0] - fox.pos[0])**2 + (foxB.pos[1] - fox.pos[1])**2)
-				if(distance <= fox.searchspawnRadius):
+				if(distance <= fox.searchRadius):
 					#print("See a mate")
 					visibleMates.append(foxB)
 
