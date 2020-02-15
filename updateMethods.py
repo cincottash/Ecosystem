@@ -165,7 +165,7 @@ def updateGrassStuff(time1):
 	#Handle grass regrowth
 	currentTime = time1
 	#print(int(currentTime*10000.0 % 30))
-	if(int(currentTime*100000.0) % 300 == 0.0 and int(currentTime*10000.0) > 0.0):
+	if(int(currentTime*1000000.0) % 1000 == 0.0 and int(currentTime*10000.0) > 0.0):
 		#print("placing grass at %s" % currentTime)
 		placed = 0
 		while(placed == 0):
@@ -200,26 +200,12 @@ def updateGrassStuff(time1):
 				print("Placed grass")
 
 def moveRandomly(animal):
-	signX = random.randint(0, 1)
-	signY = random.randint(0, 1)
 
-	if(signX == 0):
-		#print("signX is " + str(signX))
-		signX = -1
-	else:
-		#print("signX is " + str(signX))
-		signX = 1
-
-	if(signY == 0):
-		signY = -1
-	else:
-		signY = 1
-	#theta = random.randint(0, 360)
-	dx = signX*animal.velocity
-	dy = signY*animal.velocity
+	theta = random.randint(0, 360)
+	dx = animal.velocity*math.cos(theta)*1.5
+	dy = animal.velocity*math.sin(theta)*1.5
 	boundaryCheck(animal, dx, dy)
 
-	animal.pos = (animal.pos[0] + signX*animal.velocity, animal.pos[1] + signY*animal.velocity)
 
 def rabbitEat(rabbit, visibleGrass):
 	nearestGrass = visibleGrass[0]
@@ -496,15 +482,15 @@ def boundaryCheck(animal, dx, dy):
 		#Try moving in each cardinal direction
 		#reduce x leave y
 		if(math.sqrt((x-canvasWidth/2-animal.velocity*1.5)**2 + (y-canvasHeight/2)**2) <= spawnRadius):
-			animal.pos = (x-animal.velocity*1.5, y)
+			animal.pos = (x-animal.velocity*3, y)
 		#increase x leave y
 		elif(math.sqrt((x-canvasWidth/2+animal.velocity*1.5)**2 + (y-canvasHeight/2)**2) <= spawnRadius):
-			animal.pos = (x+animal.velocity*1.5, y)
+			animal.pos = (x+animal.velocity*3, y)
 		#decrease y leave x
 		elif(math.sqrt((x-canvasWidth/2)**2 + (y-canvasHeight/2-animal.velocity*1.5)**2) <= spawnRadius):
-			animal.pos = (x, y-animal.velocity*1.5)
+			animal.pos = (x, y-animal.velocity*3)
 		#increase y leave x
 		elif(math.sqrt((x-canvasWidth/2)**2 + (y-canvasHeight/2+animal.velocity*1.5)**2) <= spawnRadius):
-			animal.pos = (x, y+animal.velocity*1.5)
+			animal.pos = (x, y+animal.velocity*3)
 	else:
 		animal.pos = (animal.pos[0] + dx, animal.pos[1] + dy)
