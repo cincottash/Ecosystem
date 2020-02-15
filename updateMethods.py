@@ -37,15 +37,12 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 				currentRabbitPop += 1
 
 	#Same thing but for grass, again no overlap of other grass or rabbits
-	#TODO: Make it spawn in a circle and not a rectangle
-	#IK WHY ITS WRONG, 0,0 IS NOT THE MIDDLE OF THE SCREEN, ITS QUADRANT 2
 	while(currentGrassPop < desiredGrassPop):
 		placed = 0
-		radius = 200
 		while(placed == 0):
 			#Create a random set of cords
-			x = random.randint(-radius, radius)+canvasWidth/2
-			y = random.randint(-radius, radius)+canvasHeight/2
+			x = random.randint(-spawnRadius, spawnRadius)+canvasWidth/2
+			y = random.randint(-spawnRadius, spawnRadius)+canvasHeight/2
 
 			#check for overlap of rabbits
 			canPlace = 1
@@ -65,14 +62,11 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 						canPlace = 0
 						break		
 			
-			#THINK THIS IS WRONG
-			if(math.sqrt(int(x-canvasWidth/2)**2 + int(y-canvasHeight/2)**2) > radius):
+			if(math.sqrt(int(x-canvasWidth/2)**2 + int(y-canvasHeight/2)**2) > spawnRadius):
 				canPlace = 0
-				print("Shouldn't place")
 
-			#print(math.sqrt(int(x)**2 + int(y)**2))
 
-			#If still no overlap and within the radius, we can draw it
+			#If still no overlap and within the spawnRadius, we can draw it
 			if(canPlace):
 				grassList.append(Grass(GREEN, (x, y)))
 				placed = 1
@@ -149,36 +143,36 @@ def updateRabbitStuff():
 				rabbitSeekMate(rabbit)
 			#Search for food if hungry
 			elif(rabbit.hunger <= 50):
-				# #Search through grass within searchRadius
+				# #Search through grass within searchspawnRadius
 				rabbitForage(rabbit)
 			#If not hungry just move randomly
 			else:
 				moveRandomly(rabbit)
 
 	#divide by zero check
-	try:
-		averageRabbitSize.append(rabbitSizes/len(rabbitList))
-	except ZeroDivisionError:
-		print("WARNING: All rabbits are dead")
+	# try:
+	# 	averageRabbitSize.append(rabbitSizes/len(rabbitList))
+	# except ZeroDivisionError:
+	# 	print("WARNING: All rabbits are dead")
 
 def updateGrassStuff(time1):
 	#Handle grass regrowth
 	currentTime = time1
 	#print(int(currentTime*10000.0 % 30))
-	if(int(currentTime*10000.0 % 30) == 0 and int(currentTime*10000.0) > 0):
+	if(int(currentTime*100000.0) % 300 == 0.0 and int(currentTime*10000.0) > 0.0):
 		#print("placing grass at %s" % currentTime)
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
-			x = random.randint(canvasWidth/6, 5*canvasWidth/6)
-			y = random.randint(canvasHeight/6, 5*canvasHeight/6)
+			x = random.randint(-spawnRadius, spawnRadius)+canvasWidth/2
+			y = random.randint(-spawnRadius, spawnRadius)+canvasHeight/2
 
 			#check for overlap of rabbits
 			canPlace = 1
 			for rabbit in rabbitList:
 				#distance formula
 				distance = math.sqrt((rabbit.pos[0]-x)**2 + (rabbit.pos[1]-y)**2)
-				if(distance <= rabbit.size+8):
+				if(distance <= rabbit.size*2):
 					canPlace = 0
 					break
 
@@ -190,6 +184,9 @@ def updateGrassStuff(time1):
 						canPlace = 0
 						break		
 			
+			if(math.sqrt(int(x-canvasWidth/2)**2 + int(y-canvasHeight/2)**2) > spawnRadius):
+				canPlace = 0
+
 			#If still no overlap, we can draw it
 			if(canPlace):
 				grassList.append(Grass(GREEN, (x, y)))
@@ -264,13 +261,13 @@ def rabbitFuck(rabbit, visibleMates):
 		print("Reached mate")
 
 def rabbitForage(rabbit):
-	#Search through grass within searchRadius
+	#Search through grass within searchspawnRadius
 	visibleGrass = []
 	for grass in grassList:
-		#Accounts for circle radius, not just the center coords
+		#Accounts for circle spawnRadius, not just the center coords
 		distance = math.sqrt((grass.pos[0] - rabbit.pos[0])**2 + (grass.pos[1] - rabbit.pos[1])**2)-(grass.size + rabbit.size)
 		#find closest grass within search area
-		if(distance <= rabbit.searchRadius):
+		if(distance <= rabbit.searchspawnRadius):
 			#print("Spotted grass")
 			visibleGrass.append(grass)
 
@@ -285,7 +282,7 @@ def checkForPredators(rabbit):
 	for fox in foxList:
 		distance = math.sqrt((fox.pos[0] - rabbit.pos[0])**2 + (fox.pos[1] - rabbit.pos[1])**2)
 		#find closest grass within search area
-		if(distance <= rabbit.searchRadius):
+		if(distance <= rabbit.searchspawnRadius):
 			print("Spotted Fox!!!")
 			visiblePredators.append(fox)
 	if(len(visiblePredators) > 0):
@@ -321,7 +318,7 @@ def rabbitSeekMate(rabbit):
 			#Dont check yourself
 			if(rabbitB != rabbit):
 				distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)
-				if(distance <= rabbit.searchRadius):
+				if(distance <= rabbit.searchspawnRadius):
 					#print("See a mate")
 					visibleMates.append(rabbitB)
 
@@ -363,7 +360,7 @@ def updateFoxStuff():
 			foxSeekMate(fox)
 		#Search for food if hungry
 		elif(fox.hunger <= 50):
-			#Search through grass within searchRadius
+			#Search through grass within searchspawnRadius
 			#rabbitForage(rabbit)
 			foxForage(fox)
 		
@@ -378,13 +375,13 @@ def updateFoxStuff():
 	 	print("WARNING: All foxes are dead")
 
 def foxForage(fox):
-	#Search through grass within searchRadius
+	#Search through grass within searchspawnRadius
 	visibleRabbits = []
 	for rabbit in rabbitList:
-		#Accounts for circle radius, not just the center coords
+		#Accounts for circle spawnRadius, not just the center coords
 		distance = math.sqrt((rabbit.pos[0] - fox.pos[0])**2 + (rabbit.pos[1] - fox.pos[1])**2)
 		#find closest grass within search area
-		if(distance <= fox.searchRadius):
+		if(distance <= fox.searchspawnRadius):
 			#print("Spotted grass")
 			visibleRabbits.append(rabbit)
 
@@ -456,7 +453,7 @@ def foxSeekMate(fox):
 			#Dont check yourself
 			if(foxB != fox):
 				distance = math.sqrt((foxB.pos[0] - fox.pos[0])**2 + (foxB.pos[1] - fox.pos[1])**2)
-				if(distance <= fox.searchRadius):
+				if(distance <= fox.searchspawnRadius):
 					#print("See a mate")
 					visibleMates.append(foxB)
 

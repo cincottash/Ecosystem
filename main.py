@@ -20,7 +20,7 @@ def main():
 
 	populateCanvas(intialRabbitPop, intialGrassPop, intialFoxPop)
 	
-	drawSprites()
+	#drawSprites()
 
 	while (time < maxTime):
 		#reset background
