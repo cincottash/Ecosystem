@@ -104,7 +104,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 						break		
 			if(canPlace):
 				for fox in foxList:
-					distance = math.sqrt((grass.pos[0]-x)**2 + (grass.pos[1]-y)**2)
+					distance = math.sqrt((fox.pos[0]-x)**2 + (fox.pos[1]-y)**2)
 					if(distance <= fox.size*2):
 						canPlace = 0
 						break
