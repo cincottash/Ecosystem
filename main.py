@@ -14,9 +14,13 @@ global time
 
 def main():
 
-	intialRabbitPop = int(sys.argv[1])
-	intialGrassPop = int(sys.argv[2])
-	intialFoxPop = int(sys.argv[3])
+	if(len(sys.argv) != 4):
+		print("Incorrect argument count. Correct usage is: InitialRabbitPop InitialGrassPop InitialFoxPop")
+		exit(0)
+	else:
+		intialRabbitPop = int(sys.argv[1])
+		intialGrassPop = int(sys.argv[2])
+		intialFoxPop = int(sys.argv[3])
 
 	populateCanvas(intialRabbitPop, intialGrassPop, intialFoxPop)
 
@@ -28,7 +32,7 @@ def main():
 		
 		drawSprites()
 
-		print(time)
+		#print(time)
 
 		rabbitPop.append(len(rabbitList))
 		
