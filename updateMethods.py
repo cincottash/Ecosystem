@@ -116,7 +116,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 			#If still no overlap, we can draw it
 			if(canPlace):
 				#Just give it a size of 10 for now
-				foxList.append(Fox((x, y), size))
+				foxList.append(Fox((x, y), size, 100))
 				placed = 1
 				currentFoxPop += 1
 
@@ -443,7 +443,7 @@ def foxFuck(fox, visibleMates):
 		fox.timeSinceLastFuck = 0.0
 		nearestMate.timeSinceLastFuck = 0.0
 		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
-		foxList.append(Fox(fox.pos, int((fox.size+nearestMate.size)/2)))
+		foxList.append(Fox(fox.pos, int((fox.size+nearestMate.size)/2), 50))
 		#print("Reached fox mate")
 
 def foxSeekMate(fox):
