@@ -1,7 +1,7 @@
 global time
 global dt
 global maxTime
-
+import time as clock
 canvasWidth = 1800
 canvasHeight = 1000
 
@@ -27,3 +27,5 @@ WHITE = (255,255,255)
 GREEN = (0,255,0)
 BLACK = (0,0,0)
 RED = (255, 0, 0)
+
+lastGrassPlaceTime = clock.time()

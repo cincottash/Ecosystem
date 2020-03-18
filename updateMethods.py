@@ -7,6 +7,8 @@ from rabbit import *
 from grass import *
 from fox import *
 
+global lastGrassPlaceTime
+
 def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 	currentRabbitPop = 0
 	currentGrassPop = 0
@@ -36,7 +38,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 			
 			#If no overlap, we can draw it
 			if(canPlace):
-				rabbitList.append(Rabbit((x, y), size))
+				rabbitList.append(Rabbit((x, y), size, 100))
 				placed = 1
 				currentRabbitPop += 1
 
@@ -162,11 +164,14 @@ def updateRabbitStuff():
 		print("WARNING: All rabbits are dead")
 
 def updateGrassStuff(time1):
+	global lastGrassPlaceTime
+	#print(timeSinceLastGrassPlace)
 	#Handle grass regrowth
 	currentTime = time1
 	#print(int(currentTime*10000.0 % 30))
-	if(int(currentTime*1000000.0) % 1000 == 0.0 and int(currentTime*10000.0) > 0.0):
-		#print("placing grass at %s" % currentTime)
+	#respawn every 10 seconds
+	if((clock.time() - lastGrassPlaceTime) > 1):
+		print("placing grass at %s" % currentTime)
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
@@ -197,7 +202,8 @@ def updateGrassStuff(time1):
 			if(canPlace):
 				grassList.append(Grass(GREEN, (x, y)))
 				placed = 1
-				print("Placed grass")
+				lastGrassPlaceTime = clock.time()
+				#print("Placed grass")
 
 def moveRandomly(animal):
 
@@ -232,7 +238,7 @@ def rabbitEat(rabbit, visibleGrass):
 		else:
 			rabbit.hunger += 33.0
 		grassList.remove(nearestGrass)
-		print("Reached food")
+		#print("Reached food")
 
 def rabbitFuck(rabbit, visibleMates):
 	nearestMate = visibleMates[0]
@@ -254,8 +260,8 @@ def rabbitFuck(rabbit, visibleMates):
 		rabbit.timeSinceLastFuck = 0.0
 		nearestMate.timeSinceLastFuck = 0.0
 		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
-		rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2)))
-		print("Reached mate")
+		rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2), 50))
+		#print("Reached mate")
 
 def rabbitForage(rabbit):
 	#Search through grass within searchRadius
@@ -352,7 +358,7 @@ def updateFoxStuff():
 	#If not hungry and havent fucked in a while check for a mate
 		if (fox.hunger > 50 and fox.timeSinceLastFuck > 0.01):
 			#rabbitSeekMate(rabbit)
-			print("Looking for mate")
+			#print("Looking for mate")
 			
 			foxSeekMate(fox)
 		#Search for food if hungry
@@ -415,7 +421,7 @@ def foxEat(fox, visibleRabbits):
 		else:
 			fox.hunger += 50.0
 		rabbitList.remove(nearestRabbit)
-		print("Reached rabbit")
+		#print("Reached rabbit")
 
 def foxFuck(fox, visibleMates):
 	nearestMate = visibleMates[0]
@@ -438,7 +444,7 @@ def foxFuck(fox, visibleMates):
 		nearestMate.timeSinceLastFuck = 0.0
 		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
 		foxList.append(Fox(fox.pos, int((fox.size+nearestMate.size)/2)))
-		print("Reached fox mate")
+		#print("Reached fox mate")
 
 def foxSeekMate(fox):
 	#print("searching for mate")

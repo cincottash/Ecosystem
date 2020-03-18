@@ -1,7 +1,6 @@
 import pygame
 import random
 import math
-import time as clock
 import sys
 
 from globals import *
