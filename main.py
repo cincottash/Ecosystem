@@ -25,8 +25,10 @@ def main():
 
 	while (time < maxTime):
 		#reset background
-		canvas.fill(WHITE)
+		canvas.fill(BLACK)
 
+		pygame.draw.circle(canvas, BROWN, (canvasWidth//2, canvasHeight//2), spawnRadius)
+		#1080x1000
 		update()
 		
 		drawSprites()
