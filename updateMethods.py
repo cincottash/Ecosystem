@@ -167,8 +167,7 @@ def updateGrassStuff():
 	global lastGrassPlaceTime
 
 	#respawn every 15 seconds
-	if((clock.time() - lastGrassPlaceTime) > 15):
-		print("placing grass at %s" % currentTime)
+	if((clock.time() - lastGrassPlaceTime) > 3):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
