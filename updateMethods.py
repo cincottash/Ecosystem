@@ -163,14 +163,11 @@ def updateRabbitStuff():
 	except ZeroDivisionError:
 		print("WARNING: All rabbits are dead")
 
-def updateGrassStuff(time1):
+def updateGrassStuff():
 	global lastGrassPlaceTime
-	#print(timeSinceLastGrassPlace)
-	#Handle grass regrowth
-	currentTime = time1
-	#print(int(currentTime*10000.0 % 30))
-	#respawn every 10 seconds
-	if((clock.time() - lastGrassPlaceTime) > 1):
+
+	#respawn every 15 seconds
+	if((clock.time() - lastGrassPlaceTime) > 15):
 		print("placing grass at %s" % currentTime)
 		placed = 0
 		while(placed == 0):
