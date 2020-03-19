@@ -1,6 +1,5 @@
 import random
 import math
-import time as clock
 
 from globals import *
 from rabbit import *
