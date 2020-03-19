@@ -459,17 +459,6 @@ def foxSeekMate(fox):
 	#If no visible mates, move randomly
 	if(len(visibleMates) == 0):
 		moveRandomly(fox)
-
-		#Run away from it
-		# theta = math.atan2(nearestPredator.pos[1] - rabbit.pos[1], nearestPredator.pos[0] - rabbit.pos[0])
-		# #had to scale it up a little with * 1.5
-		# dx = rabbit.velocity * math.cos(theta) * -1.5
-		# dy = rabbit.velocity * math.sin(theta) * -1.5
-
-		#check if we're over the screen boundary
-		# boundaryCheck(rabbit, dx, dy)
-
-		#boundaryCheck(fox, dx, dy)
 	#If there are visible mates, find the closest one and move towards it
 	else:
 		foxFuck(fox, visibleMates)
