@@ -8,9 +8,7 @@ A simple evolution simulator analgous to The Game of Life.
 
 ## Prerequisites
 
-A list of required libraries is located in requirments.txt and can be installed via Pip with 
-
-```pip install -r requirments.txt```
+A list of required libraries is located in requirments.txt and can be installed via Pip with ```pip install -r requirments.txt```
 
 ## Built With
 
