@@ -18,7 +18,7 @@ A simple evolution simulator analgous to The Game of Life.
 
 * The offspring's size will be an average of the parents(affecting the other stats).
 
-* Foxes will try and eat rabbits, if there is a fox within a rabbit's sight, the rabbit will prioritize fleeing until the fox is no longer visible over eating and fucking.
+* Foxes will try and eat rabbits, if there is a fox within a rabbit's sight, the rabbit will prioritize fleeing (until the fox is no longer visible) over eating and fucking.
 
 * If no foxes around a rabbit, the rabbit will prioritize eating over fucking.
 
