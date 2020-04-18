@@ -5,6 +5,7 @@ from globals import *
 from rabbit import *
 from grass import *
 from fox import *
+import time as clock
 
 global lastGrassPlaceTime
 
@@ -37,7 +38,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 			
 			#If no overlap, we can draw it
 			if(canPlace):
-				rabbitList.append(Rabbit((x, y), size, 100))
+				rabbitList.append(Rabbit((x, y), size, 100, random.randint(0, 360)))
 				placed = 1
 				currentRabbitPop += 1
 
@@ -115,7 +116,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 			#If still no overlap, we can draw it
 			if(canPlace):
 				#Just give it a size of 10 for now
-				foxList.append(Fox((x, y), size, 100))
+				foxList.append(Fox((x, y), size, 100, random.randint(0, 360)))
 				placed = 1
 				currentFoxPop += 1
 
@@ -125,7 +126,7 @@ def updateRabbitStuff():
 	for rabbit in rabbitList:
 		rabbitSizes += rabbit.size
 		rabbit.timeSinceLastFuck += dt
-		
+		 
 		#Check if rabbit is starving aka the next hunger tick drops hunger leq 0
 		if(rabbit.hunger - rabbit.size*dt*300 <= 0):
 			#dont let hunger drop below 0 if starving
@@ -202,9 +203,9 @@ def updateGrassStuff():
 
 def moveRandomly(animal):
 
-	theta = random.randint(0, 360)
-	dx = animal.velocity*math.cos(theta)*1.5
-	dy = animal.velocity*math.sin(theta)*1.5
+	#theta = random.randint(0, 360)
+	dx = animal.velocity*math.cos(animal.theta)*1.5
+	dy = animal.velocity*math.sin(animal.theta)*1.5
 	boundaryCheck(animal, dx, dy)
 
 
@@ -255,7 +256,7 @@ def rabbitFuck(rabbit, visibleMates):
 		rabbit.timeSinceLastFuck = 0.0
 		nearestMate.timeSinceLastFuck = 0.0
 		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
-		rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2), 50))
+		rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2), 50, random.randint(0, 360)))
 		#print("Reached mate")
 
 def rabbitForage(rabbit):
@@ -437,8 +438,8 @@ def foxFuck(fox, visibleMates):
 	if(int(nearestMateDistance) < 10):
 		fox.timeSinceLastFuck = 0.0
 		nearestMate.timeSinceLastFuck = 0.0
-		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
-		foxList.append(Fox(fox.pos, (fox.size+nearestMate.size)//2, 50))
+		#Make them have sex and spawn a new fox by averaging the stats of the parental foxes
+		foxList.append(Fox(fox.pos, (fox.size+nearestMate.size)//2, 50, random.randint(0, 360)))
 		#print("Reached fox mate")
 
 def foxSeekMate(fox):
@@ -467,21 +468,8 @@ def boundaryCheck(animal, dx, dy):
 	x = animal.pos[0]
 	y = animal.pos[1]
 
-	#If not in range
-	#TODO: Pick a better order to do this, sometimes gets stuck in loops
+	#If not in range rotate theta by 90
 	if(math.sqrt((x-canvasWidth/2+dx)**2 + (y-canvasHeight/2+dy)**2) > spawnRadius):
-		#Try moving in each cardinal direction
-		#reduce x leave y
-		if(math.sqrt((x-canvasWidth/2-animal.velocity*1.5)**2 + (y-canvasHeight/2)**2) <= spawnRadius):
-			animal.pos = (x-animal.velocity*1.5, y)
-		#increase x leave y
-		elif(math.sqrt((x-canvasWidth/2+animal.velocity*1.5)**2 + (y-canvasHeight/2)**2) <= spawnRadius):
-			animal.pos = (x+animal.velocity*1.5, y)
-		#decrease y leave x
-		elif(math.sqrt((x-canvasWidth/2)**2 + (y-canvasHeight/2-animal.velocity*1.5)**2) <= spawnRadius):
-			animal.pos = (x, y-animal.velocity*1.5)
-		#increase y leave x
-		elif(math.sqrt((x-canvasWidth/2)**2 + (y-canvasHeight/2+animal.velocity*1.5)**2) <= spawnRadius):
-			animal.pos = (x, y+animal.velocity*1.5)
+		animal.theta += 90
 	else:
 		animal.pos = (animal.pos[0] + dx, animal.pos[1] + dy)
