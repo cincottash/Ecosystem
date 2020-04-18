@@ -1,3 +1,5 @@
+import time as currentTime
+import random
 class Fox:
 	def __init__(self, pos, size, hunger, theta):
 		#self.color = color
@@ -9,3 +11,5 @@ class Fox:
 		self.health = 100.0
 		self.velocity = 20/size	
 		self.timeSinceLastFuck = 0.0
+	timeBeforeRotate = random.uniform(3, 6)
+	timeOfLastRotation = currentTime.time()

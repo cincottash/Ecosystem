@@ -203,10 +203,18 @@ def updateGrassStuff():
 
 def moveRandomly(animal):
 
-	#theta = random.randint(0, 360)
+	if((clock.time() - animal.timeOfLastRotation) > animal.timeBeforeRotate):
+		animal.theta = random.randint(0, 360)
+		animal.timeOfLastRotation = clock.time()
+		animal.timeBeforeRotate = random.uniform(3, 6)
 	dx = animal.velocity*math.cos(animal.theta)*1.5
 	dy = animal.velocity*math.sin(animal.theta)*1.5
 	boundaryCheck(animal, dx, dy)
+	
+
+
+	##respawn every 15 seconds
+	#if((clock.time() - lastGrassPlaceTime) > 3):
 
 
 def rabbitEat(rabbit, visibleGrass):
@@ -471,5 +479,7 @@ def boundaryCheck(animal, dx, dy):
 	#If not in range rotate theta by 90
 	if(math.sqrt((x-canvasWidth/2+dx)**2 + (y-canvasHeight/2+dy)**2) > spawnRadius):
 		animal.theta += 90
+		animal.timeOfLastRotation = clock.time()
+		animal.timeBeforeRotate = random.uniform(3, 6)
 	else:
 		animal.pos = (animal.pos[0] + dx, animal.pos[1] + dy)
