@@ -233,7 +233,7 @@ def rabbitEat(rabbit, visibleGrass):
 	dx = rabbit.velocity * math.cos(theta) * 1.5
 	dy = rabbit.velocity * math.sin(theta) * 1.5
 
-	rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
+	rabbit.pos = (rabbit.pos[0] + dx, rabbit.pos[1] + dy)
 
 	#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
 	if(nearestGrassDistance < 5):
@@ -441,7 +441,7 @@ def foxFuck(fox, visibleMates):
 	#had to scale it up a little with * 1.5
 	dx = fox.velocity * math.cos(theta) * 1.5
 	dy = fox.velocity * math.sin(theta) * 1.5
-	fox.pos = (fox.pos[0] + int(dx), fox.pos[1] + int(dy))
+	fox.pos = (fox.pos[0] + dx, fox.pos[1] + dy)
 
 	if(int(nearestMateDistance) < 10):
 		fox.timeSinceLastFuck = 0.0
