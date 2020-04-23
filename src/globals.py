@@ -19,6 +19,8 @@ rotationAngle = 90
 
 rabbitMaxHunger = 100.0
 
+rabbitMaxHealth = 100.0
+
 rabbitList = []
 grassList = []
 foxList = []

@@ -140,8 +140,13 @@ def updateRabbitStuff():
 				#otherwise just reduce our health
 				rabbit.health -= rabbit.size*dt*10
 		else:
-			#if not starving, reduce hunger
+			#if not starving, reduce hunger and increase health by the same amount
 			rabbit.hunger -= rabbit.size*dt*10
+
+			rabbit.health += rabbit.size*dt*10
+
+			if(rabbit.health > rabbitMaxHealth):
+				rabbit.health = rabbitMaxHealth
 
 		#Prioritize running from foxes over eating and fucking
 		if(checkForPredators(rabbit) == False):
