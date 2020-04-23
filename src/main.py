@@ -47,15 +47,12 @@ def main():
 		#commit changes
 		pygame.display.update()
 
-		if(len(rabbitList) == 0):
-			plotStuff(timeStamps[len(timeStamps) - 1], maxRabbitPop)
-			exit(0)
-		else:
-			for event in pygame.event.get():	
-				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_RETURN:
-						plotStuff(timeStamps[len(timeStamps) - 1], maxRabbitPop)
-						exit(0)
+
+		for event in pygame.event.get():	
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_RETURN:
+					plotStuff(timeStamps[len(timeStamps) - 1], maxRabbitPop)
+					exit(0)
 
 	
 

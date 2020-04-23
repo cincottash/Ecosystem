@@ -125,7 +125,6 @@ def updateRabbitStuff():
 	rabbitSizes = 0
 	for rabbit in rabbitList:
 		rabbitSizes += rabbit.size
-		rabbit.timeSinceLastFuck += dt
 		 
 		#Check if rabbit is starving aka the next hunger tick drops hunger leq 0
 		if(rabbit.hunger - rabbit.size*dt*200 <= 0):
@@ -146,8 +145,8 @@ def updateRabbitStuff():
 
 		#Prioritize running from foxes over eating and fucking
 		if(checkForPredators(rabbit) == False):
-		#If not hungry and havent fucked in a while check for a mate
-			if (rabbit.hunger > 50 and rabbit.timeSinceLastFuck > 0.01):
+			#If not hungry and havent fucked in 20 sec, check for a mate
+			if (rabbit.hunger > 50 and (clock.time() - rabbit.timeOfLastFuck > 20)):
 				rabbitSeekMate(rabbit)
 			#Search for food if hungry
 			elif(rabbit.hunger <= 50):
@@ -166,7 +165,7 @@ def updateRabbitStuff():
 def updateGrassStuff():
 	global lastGrassPlaceTime
 
-	#respawn every 15 seconds
+	#respawn every 3.5 seconds
 	if((clock.time() - lastGrassPlaceTime) > 3.5):
 		placed = 0
 		while(placed == 0):
@@ -261,8 +260,8 @@ def rabbitFuck(rabbit, visibleMates):
 	rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
 
 	if(int(nearestMateDistance) < 10):
-		rabbit.timeSinceLastFuck = 0.0
-		nearestMate.timeSinceLastFuck = 0.0
+		rabbit.timeOfLastFuck = clock.time()
+		nearestMate.timeOfLastFuck = clock.time()
 		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
 		rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2), 80, random.randint(0, 360)))
 		#print("Reached mate")
@@ -321,7 +320,7 @@ def rabbitSeekMate(rabbit):
 	#Check if any potential mates are within your vision
 	for rabbitB in rabbitList:
 		#Only go to mate if they're also looking for a mate
-		if(rabbitB.hunger > 50 and rabbitB.timeSinceLastFuck > 0.01):
+		if(rabbitB.hunger > 50 and (clock.time() - rabbitB.timeOfLastFuck > 20)):
 			#Dont check yourself
 			if(rabbitB != rabbit):
 				distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)
@@ -340,7 +339,7 @@ def rabbitSeekMate(rabbit):
 def updateFoxStuff():
 	for fox in foxList:
 		
-		fox.timeSinceLastFuck += dt
+		fox.timeOfLastFuck += dt
 		
 		#Check if rabbit is starving aka the next hunger tick drops hunger leq 0
 		if(fox.hunger - fox.size*dt*300 <= 0):
@@ -360,7 +359,7 @@ def updateFoxStuff():
 			fox.hunger -= fox.size*dt*300
 
 	#If not hungry and havent fucked in a while check for a mate
-		if (fox.hunger > 50 and fox.timeSinceLastFuck > 0.01):
+		if (fox.hunger > 50 and fox.timeOfLastFuck > 0.01):
 			#rabbitSeekMate(rabbit)
 			#print("Looking for mate")
 			
@@ -444,8 +443,8 @@ def foxFuck(fox, visibleMates):
 	fox.pos = (fox.pos[0] + dx, fox.pos[1] + dy)
 
 	if(int(nearestMateDistance) < 10):
-		fox.timeSinceLastFuck = 0.0
-		nearestMate.timeSinceLastFuck = 0.0
+		fox.timeOfLastFuck = 0.0
+		nearestMate.timeOfLastFuck = 0.0
 		#Make them have sex and spawn a new fox by averaging the stats of the parental foxes
 		foxList.append(Fox(fox.pos, (fox.size+nearestMate.size)//2, 50, random.randint(0, 360)))
 		#print("Reached fox mate")
@@ -456,7 +455,7 @@ def foxSeekMate(fox):
 	#Check if any potential mates are within your vision
 	for foxB in foxList:
 		#Only go to mate if they're also looking for a mate
-		if(foxB.hunger > 50 and foxB.timeSinceLastFuck > 0.01):
+		if(foxB.hunger > 50 and foxB.timeOfLastFuck > 0.01):
 			#Dont check yourself
 			if(foxB != fox):
 				distance = math.sqrt((foxB.pos[0] - fox.pos[0])**2 + (foxB.pos[1] - fox.pos[1])**2)

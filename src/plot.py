@@ -14,7 +14,7 @@ def plotStuff(xLim, maxRabbits):
 	plt.title('Rabbit Population vs Time')
 	plt.xlim(0, xLim)
 
-	#Make the graph go a bit 10 % higher than the max rabbits
+	#Make the graph go 10% higher than the max rabbits
 	plt.ylim(0, maxRabbits + maxRabbits*0.1)
 	plt.grid(True)
 

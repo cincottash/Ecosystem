@@ -1,4 +1,4 @@
-import time as currentTime
+from globals import *
 import random
 class Rabbit:
 	def __init__(self, pos, size, hunger, theta):
@@ -10,6 +10,6 @@ class Rabbit:
 		self.hunger = hunger
 		self.health = 100.0
 		self.velocity = 12/size
-		self.timeSinceLastFuck = 0.0
+		self.timeOfLastFuck = clock.time()
 	timeBeforeRotate = random.uniform(3, 6)
-	timeOfLastRotation = currentTime.time()
+	timeOfLastRotation = clock.time()
