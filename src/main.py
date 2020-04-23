@@ -23,6 +23,7 @@ def main():
 
 	populateCanvas(intialRabbitPop, intialGrassPop, intialFoxPop)
 
+	#Use this later for graphing
 	maxRabbitPop = intialRabbitPop
 
 	while (True):
@@ -32,12 +33,9 @@ def main():
 		
 
 		pygame.draw.circle(canvas, BROWN, (canvasWidth//2, canvasHeight//2), spawnRadius)
-		#1080x1000
 		update()
 		
 		drawSprites()
-
-		#print(time)
 
 		if(len(rabbitList) > maxRabbitPop):
 			maxRabbitPop = len(rabbitList)
@@ -49,11 +47,15 @@ def main():
 		#commit changes
 		pygame.display.update()
 
-		for event in pygame.event.get():	
-			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_RETURN:
-					plotStuff(timeStamps[len(timeStamps) - 1], maxRabbitPop)
-					exit(0)
+		if(len(rabbitList) == 0):
+			plotStuff(timeStamps[len(timeStamps) - 1], maxRabbitPop)
+			exit(0)
+		else:
+			for event in pygame.event.get():	
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_RETURN:
+						plotStuff(timeStamps[len(timeStamps) - 1], maxRabbitPop)
+						exit(0)
 
 	
 

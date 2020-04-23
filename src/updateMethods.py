@@ -5,7 +5,6 @@ from globals import *
 from rabbit import *
 from grass import *
 from fox import *
-import time as clock
 
 global lastGrassPlaceTime
 
@@ -122,6 +121,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 
 
 def updateRabbitStuff():
+
 	rabbitSizes = 0
 	for rabbit in rabbitList:
 		rabbitSizes += rabbit.size
