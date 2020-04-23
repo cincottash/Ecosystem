@@ -37,7 +37,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 			
 			#If no overlap, we can draw it
 			if(canPlace):
-				rabbitList.append(Rabbit((x, y), size, 100, random.randint(0, 360)))
+				rabbitList.append(Rabbit((x, y), size, rabbitStartingHunger, random.randint(0, 360)))
 				placed = 1
 				currentRabbitPop += 1
 
@@ -146,10 +146,10 @@ def updateRabbitStuff():
 		#Prioritize running from foxes over eating and fucking
 		if(checkForPredators(rabbit) == False):
 			#If not hungry and havent fucked in 20 sec, check for a mate
-			if (rabbit.hunger > 50 and (clock.time() - rabbit.timeOfLastFuck > 20)):
+			if (rabbit.hunger > rabbitMaxHunger/2 and (clock.time() - rabbit.timeOfLastFuck > rabbitFuckDelay)):
 				rabbitSeekMate(rabbit)
 			#Search for food if hungry
-			elif(rabbit.hunger <= 50):
+			elif(rabbit.hunger <= rabbitMaxHunger/2):
 				# #Search through grass within searchRadius
 				rabbitForage(rabbit)
 			#If not hungry just move randomly
@@ -165,8 +165,8 @@ def updateRabbitStuff():
 def updateGrassStuff():
 	global lastGrassPlaceTime
 
-	#respawn every 3.5 seconds
-	if((clock.time() - lastGrassPlaceTime) > 5.0):
+	#respawn every 5 seconds
+	if((clock.time() - lastGrassPlaceTime) > grassRespawnDelay):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
@@ -236,10 +236,10 @@ def rabbitEat(rabbit, visibleGrass):
 
 	#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
 	if(nearestGrassDistance < 5):
-		if(rabbit.hunger + 50.0 > 100.0):	
-			rabbit.hunger = 100.0
+		if(rabbit.hunger + rabbitMaxHunger/2 > rabbitMaxHunger):	
+			rabbit.hunger = rabbitMaxHunger
 		else:
-			rabbit.hunger += 50.0
+			rabbit.hunger += rabbitMaxHunger/2
 		grassList.remove(nearestGrass)
 		#print("Reached food")
 
@@ -263,7 +263,7 @@ def rabbitFuck(rabbit, visibleMates):
 		rabbit.timeOfLastFuck = clock.time()
 		nearestMate.timeOfLastFuck = clock.time()
 		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
-		rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2), 80, random.randint(0, 360)))
+		rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2), rabbitOffspringHunger, random.randint(0, 360)))
 		#print("Reached mate")
 
 def rabbitForage(rabbit):
@@ -320,7 +320,7 @@ def rabbitSeekMate(rabbit):
 	#Check if any potential mates are within your vision
 	for rabbitB in rabbitList:
 		#Only go to mate if they're also looking for a mate
-		if(rabbitB.hunger > 50 and (clock.time() - rabbitB.timeOfLastFuck > 20)):
+		if(rabbitB.hunger > 50 and (clock.time() - rabbitB.timeOfLastFuck > rabbitFuckDelay)):
 			#Dont check yourself
 			if(rabbitB != rabbit):
 				distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)
@@ -477,7 +477,7 @@ def boundaryCheck(animal, dx, dy):
 
 	#If not in range rotate theta by 90
 	if(math.sqrt((x-canvasWidth/2+dx)**2 + (y-canvasHeight/2+dy)**2) > spawnRadius):
-		animal.theta += 90
+		animal.theta += rotationAngle
 		animal.timeOfLastRotation = clock.time()
 		animal.timeBeforeRotate = random.uniform(3, 6)
 	else:

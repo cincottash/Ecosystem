@@ -67,7 +67,5 @@ def update():
 	updateFoxStuff()
 
 	time += dt
-	#clock.sleep(.05)
-
 if __name__== '__main__':
 	main()
