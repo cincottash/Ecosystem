@@ -9,7 +9,7 @@ class Rabbit:
 		self.searchRadius = self.size*30
 		self.hunger = hunger
 		self.health = 100.0
-		self.velocity = 12/size
+		self.velocity = 1/size
 		self.timeOfLastFuck = clock.time()
 	timeBeforeRotate = random.uniform(3, 6)
 	timeOfLastRotation = clock.time()

@@ -127,21 +127,21 @@ def updateRabbitStuff():
 		rabbitSizes += rabbit.size
 		 
 		#Check if rabbit is starving aka the next hunger tick drops hunger leq 0
-		if(rabbit.hunger - rabbit.size*dt*200 <= 0):
+		if(rabbit.hunger - rabbit.size*dt*10 <= 0):
 			#dont let hunger drop below 0 if starving
 			rabbit.hunger = 0
 			#Since we're starving, check if the next tick of health loss will kill us
-			if(rabbit.health - rabbit.size*dt*200 <= 0):
+			if(rabbit.health - rabbit.size*dt*10 <= 0):
 				#if it will kill us, remove the rabbit
 				rabbitList.remove(rabbit)
 				#Dont do other stuff stince we're dead
 				continue
 			else:
 				#otherwise just reduce our health
-				rabbit.health -= rabbit.size*dt*200
+				rabbit.health -= rabbit.size*dt*10
 		else:
 			#if not starving, reduce hunger
-			rabbit.hunger -= rabbit.size*dt*200
+			rabbit.hunger -= rabbit.size*dt*10
 
 		#Prioritize running from foxes over eating and fucking
 		if(checkForPredators(rabbit) == False):
@@ -166,7 +166,7 @@ def updateGrassStuff():
 	global lastGrassPlaceTime
 
 	#respawn every 3.5 seconds
-	if((clock.time() - lastGrassPlaceTime) > 3.5):
+	if((clock.time() - lastGrassPlaceTime) > 5.0):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
@@ -206,8 +206,8 @@ def moveRandomly(animal):
 		animal.theta = random.randint(0, 360)
 		animal.timeOfLastRotation = clock.time()
 		animal.timeBeforeRotate = random.uniform(3, 6)
-	dx = animal.velocity*math.cos(animal.theta)*1.5
-	dy = animal.velocity*math.sin(animal.theta)*1.5
+	dx = animal.velocity*math.cos(animal.theta)
+	dy = animal.velocity*math.sin(animal.theta)
 	boundaryCheck(animal, dx, dy)
 	
 
@@ -229,8 +229,8 @@ def rabbitEat(rabbit, visibleGrass):
 	#Move towards nearest grass
 	theta = math.atan2(nearestGrass.pos[1] - rabbit.pos[1], nearestGrass.pos[0] - rabbit.pos[0])
 	#had to scale it up a little with * 1.5
-	dx = rabbit.velocity * math.cos(theta) * 1.5
-	dy = rabbit.velocity * math.sin(theta) * 1.5
+	dx = rabbit.velocity * math.cos(theta) 
+	dy = rabbit.velocity * math.sin(theta)
 
 	rabbit.pos = (rabbit.pos[0] + dx, rabbit.pos[1] + dy)
 
@@ -255,9 +255,9 @@ def rabbitFuck(rabbit, visibleMates):
 	#Move towards nearest grass
 	theta = math.atan2(nearestMate.pos[1] - rabbit.pos[1], nearestMate.pos[0] - rabbit.pos[0])
 	#had to scale it up a little with * 1.5
-	dx = rabbit.velocity * math.cos(theta) * 1.5
-	dy = rabbit.velocity * math.sin(theta) * 1.5
-	rabbit.pos = (rabbit.pos[0] + int(dx), rabbit.pos[1] + int(dy))
+	dx = rabbit.velocity * math.cos(theta)
+	dy = rabbit.velocity * math.sin(theta)
+	rabbit.pos = (rabbit.pos[0] + dx, rabbit.pos[1] + dy)
 
 	if(int(nearestMateDistance) < 10):
 		rabbit.timeOfLastFuck = clock.time()
@@ -303,9 +303,9 @@ def checkForPredators(rabbit):
 
 		#Run away from it
 		theta = math.atan2(nearestPredator.pos[1] - rabbit.pos[1], nearestPredator.pos[0] - rabbit.pos[0])
-		#had to scale it up a little with * 1.5
-		dx = rabbit.velocity * math.cos(theta) * -1.5
-		dy = rabbit.velocity * math.sin(theta) * -1.5
+		#-1 to go the opposite direction
+		dx = rabbit.velocity * math.cos(theta) * -1
+		dy = rabbit.velocity * math.sin(theta) * -1
 
 		#check if we're over the screen boundary
 		boundaryCheck(rabbit, dx, dy)
