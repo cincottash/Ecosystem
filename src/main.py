@@ -23,6 +23,8 @@ def main():
 
 	populateCanvas(intialRabbitPop, intialGrassPop, intialFoxPop)
 
+	maxRabbitPop = intialRabbitPop
+
 	while (True):
 		#reset background
 		canvas.fill(BLACK)
@@ -37,6 +39,9 @@ def main():
 
 		#print(time)
 
+		if(len(rabbitList) > maxRabbitPop):
+			maxRabbitPop = len(rabbitList)
+
 		rabbitPop.append(len(rabbitList))
 		
 		timeStamps.append(time)
@@ -47,7 +52,7 @@ def main():
 		for event in pygame.event.get():	
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_RETURN:
-					plotStuff(timeStamps[len(timeStamps) - 1])
+					plotStuff(timeStamps[len(timeStamps) - 1], maxRabbitPop)
 					exit(0)
 
 	
