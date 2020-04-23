@@ -27,6 +27,8 @@ def main():
 		#reset background
 		canvas.fill(BLACK)
 
+		
+
 		pygame.draw.circle(canvas, BROWN, (canvasWidth//2, canvasHeight//2), spawnRadius)
 		#1080x1000
 		update()
@@ -45,7 +47,7 @@ def main():
 		for event in pygame.event.get():	
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_RETURN:
-					plotStuff()
+					plotStuff(timeStamps[len(timeStamps) - 1])
 					exit(0)
 
 	
