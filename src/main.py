@@ -23,7 +23,7 @@ def main():
 
 	populateCanvas(intialRabbitPop, intialGrassPop, intialFoxPop)
 
-	while (time < maxTime):
+	while (True):
 		#reset background
 		canvas.fill(BLACK)
 

@@ -128,21 +128,21 @@ def updateRabbitStuff():
 		rabbit.timeSinceLastFuck += dt
 		 
 		#Check if rabbit is starving aka the next hunger tick drops hunger leq 0
-		if(rabbit.hunger - rabbit.size*dt*300 <= 0):
+		if(rabbit.hunger - rabbit.size*dt*200 <= 0):
 			#dont let hunger drop below 0 if starving
 			rabbit.hunger = 0
 			#Since we're starving, check if the next tick of health loss will kill us
-			if(rabbit.health - rabbit.size*dt*300 <= 0):
+			if(rabbit.health - rabbit.size*dt*200 <= 0):
 				#if it will kill us, remove the rabbit
 				rabbitList.remove(rabbit)
 				#Dont do other stuff stince we're dead
 				continue
 			else:
 				#otherwise just reduce our health
-				rabbit.health -= rabbit.size*dt*300
+				rabbit.health -= rabbit.size*dt*200
 		else:
-			#if not starving, reduce health
-			rabbit.hunger -= rabbit.size*dt*300
+			#if not starving, reduce hunger
+			rabbit.hunger -= rabbit.size*dt*200
 
 		#Prioritize running from foxes over eating and fucking
 		if(checkForPredators(rabbit) == False):
@@ -167,7 +167,7 @@ def updateGrassStuff():
 	global lastGrassPlaceTime
 
 	#respawn every 15 seconds
-	if((clock.time() - lastGrassPlaceTime) > 3):
+	if((clock.time() - lastGrassPlaceTime) > 3.5):
 		placed = 0
 		while(placed == 0):
 			#Create a random set of cords
@@ -237,10 +237,10 @@ def rabbitEat(rabbit, visibleGrass):
 
 	#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
 	if(nearestGrassDistance < 5):
-		if(rabbit.hunger + 33.0 > 100.0):	
+		if(rabbit.hunger + 50.0 > 100.0):	
 			rabbit.hunger = 100.0
 		else:
-			rabbit.hunger += 33.0
+			rabbit.hunger += 50.0
 		grassList.remove(nearestGrass)
 		#print("Reached food")
 
@@ -264,7 +264,7 @@ def rabbitFuck(rabbit, visibleMates):
 		rabbit.timeSinceLastFuck = 0.0
 		nearestMate.timeSinceLastFuck = 0.0
 		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
-		rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2), 50, random.randint(0, 360)))
+		rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2), 80, random.randint(0, 360)))
 		#print("Reached mate")
 
 def rabbitForage(rabbit):
