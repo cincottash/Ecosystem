@@ -268,7 +268,7 @@ def rabbitFuck(rabbit, visibleMates):
 		rabbit.timeOfLastFuck = clock.time()
 		nearestMate.timeOfLastFuck = clock.time()
 		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
-		rabbitList.append(Rabbit(rabbit.pos, int((rabbit.size+nearestMate.size)/2), rabbitOffspringHunger, random.randint(0, 360)))
+		rabbitList.append(Rabbit(rabbit.pos, (rabbit.size+nearestMate.size)//2, rabbitOffspringHunger, random.randint(0, 360)))
 		#print("Reached mate")
 
 def rabbitForage(rabbit):

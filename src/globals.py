@@ -9,7 +9,7 @@ time = 0.00000
 dt = 0.00005
 spawnRadius = 450
 
-grassRespawnDelay = 5.0
+grassRespawnDelay = 4.0
 rabbitFuckDelay = 20.0
 
 rabbitStartingHunger = 100
