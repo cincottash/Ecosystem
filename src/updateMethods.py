@@ -20,7 +20,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 			#Create a random set of cords and a random size
 			x = random.randint(-spawnRadius, spawnRadius)+canvasWidth/2
 			y = random.randint(-spawnRadius, spawnRadius)+canvasHeight/2
-			size = random.randint(4, 14)
+			size = random.randint(minRabbitStartSize, maxRabbitStartSize)
 
 			#check for overlap of rabbits
 			canPlace = 1
@@ -151,11 +151,10 @@ def updateRabbitStuff():
 
 			if(rabbit.health > rabbit.maxHealth):
 				rabbit.health = rabbit.maxHealth
-
 		#Prioritize running from foxes over eating and fucking
 		if(checkForPredators(rabbit) == False):
 			#If not hungry and havent fucked in 20 sec, check for a mate
-			if (rabbit.hunger > rabbit.maxHunger/2 and (clock.time() - rabbit.timeOfLastFuck > rabbitFuckDelay)):
+			if (rabbit.hunger > rabbit.maxHunger/2 and (clock.time() - rabbit.timeOfLastFuck > rabbit.fuckDelay)):
 				rabbitSeekMate(rabbit)
 			#Search for food if hungry
 			elif(rabbit.hunger <= rabbit.maxHunger/2):
@@ -329,7 +328,7 @@ def rabbitSeekMate(rabbit):
 	#Check if any potential mates are within your vision
 	for rabbitB in rabbitList:
 		#Only go to mate if they're also looking for a mate
-		if(rabbitB.hunger > rabbitB.maxHunger/2 and (clock.time() - rabbitB.timeOfLastFuck > rabbitFuckDelay)):
+		if(rabbitB.hunger > rabbitB.maxHunger/2 and (clock.time() - rabbitB.timeOfLastFuck > rabbit.fuckDelay)):
 			#Dont check yourself
 			if(rabbitB != rabbit):
 				distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)

@@ -10,16 +10,12 @@ dt = 0.00005
 spawnRadius = 450
 
 grassRespawnDelay = 5.0
-rabbitFuckDelay = 20.0
-
-#rabbitStartingHunger = 100
-#rabbitOffspringHunger = 80
 
 rotationAngle = 90
 
-#rabbitMaxHunger = 100.0
+minRabbitStartSize = 4
 
-#rabbitMaxHealth = 100.0
+maxRabbitStartSize = 14
 
 rabbitList = []
 grassList = []

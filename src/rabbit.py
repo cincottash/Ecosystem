@@ -13,5 +13,7 @@ class Rabbit:
 		self.maxHunger = self.size * 18
 		self.timeOfLastFuck = clock.time()
 		self.maxHealth = self.maxHunger
+		#Time in sec of how long we have to wait to fuck after just fucking
+		self.fuckDelay = 2 * self.size
 	timeBeforeRotate = random.uniform(3, 6)
 	timeOfLastRotation = clock.time()
