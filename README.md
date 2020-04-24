@@ -4,13 +4,15 @@ A simple evolution simulator analgous to The Game of Life.
 
 ## Features
 
-* Animals move in random direction according to their speed
+* Animals move in random direction for a random amount of time
+
+* Animal's velocity is based off their size
 
 * Their hunger level decreases according to their size.
 
 * When below 50% hunger they will search out food.
 
-* Then moves to food within their sight radius(grows lineraly with size value)
+* Animals move to food within their sight radius(grows lineraly with size value)
 
 * Food restores a fixed portion of hunger
 
@@ -52,7 +54,11 @@ A list of required libraries is located in requirments.txt and can be installed 
 ## Known Issues
 * Rabbits sometimes get stuck on outer edge of circle and clump together until dead(only when foxes present).
 
+* Foxes currently don't work
+
 * Animals don't regen HP (not implemented yet).
+
+* Min size capped at 6 idk why
 
 ## Acknowledgments
 
