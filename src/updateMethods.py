@@ -134,15 +134,15 @@ def updateRabbitStuff():
 		if(rabbit.hunger - rabbit.velocity*dt*1500 <= 0):
 			#dont let hunger drop below 0 if starving
 			rabbit.hunger = 0
-			#Since we're starving, check if the next tick of health loss will kill us
-			if(rabbit.health - rabbit.velocity*dt*1500 <= 0):
+			#Since we're starving, check if the next tick of health loss will kill us, we lose health at twice the rate we lose hunger
+			if(rabbit.health - rabbit.velocity*dt*3000 <= 0):
 				#if it will kill us, remove the rabbit
 				rabbitList.remove(rabbit)
 				#Dont do other stuff stince we're dead
 				continue
 			else:
-				#otherwise just reduce our health
-				rabbit.health -= rabbit.velocity*dt*1500
+				#otherwise just reduce our health, lose health at twice the rate we lose hunger
+				rabbit.health -= rabbit.velocity*dt*3000
 		else:
 			#if not starving, reduce hunger and increase health by the same amount
 			rabbit.hunger -= rabbit.velocity*dt*1500
