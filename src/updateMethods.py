@@ -169,6 +169,7 @@ def updateRabbitStuff():
 		averageRabbitSize.append(rabbitSizes/len(rabbitList))
 	except ZeroDivisionError:
 		print("WARNING: All rabbits are dead")
+		averageRabbitSize.append(0)
 
 def updateGrassStuff():
 	global lastGrassPlaceTime
@@ -248,6 +249,31 @@ def rabbitEat(rabbit, visibleGrass):
 		grassList.remove(nearestGrass)
 		#print("Reached food")
 
+#offspring has a 25% chance for a mutation to happen when its born, returns new size
+def mutate(animalA, animalB):
+	mutate = random.randint(1, 100)
+
+	size = (animalA.size+animalB.size)//2
+
+	#if we can mutate, change the size by 20% with a random magnitude
+	if(mutate <= mutateProbability):
+		magnitude = random.randint(0, 1)
+
+		#if mag is 0, decrease size, if 1 increase it
+		if(magnitude == 1):
+			print("mutated larger")
+			size = int(size * 1.2)
+		else:
+			#check if decreasing the size will make the size less than 1 (size has to be at least 1)
+			if(int(size * 0.8) < 1):
+				#if we can't decrease, just increase instead
+				print("mutated larger")
+				size = int(size * 1.2)
+			else:
+				print("mutated smaller")
+				size = int(size * 0.8)
+	return size
+
 def rabbitFuck(rabbit, visibleMates):
 	nearestMate = visibleMates[0]
 	for mate in visibleMates: 
@@ -265,11 +291,14 @@ def rabbitFuck(rabbit, visibleMates):
 	rabbit.pos = (rabbit.pos[0] + dx, rabbit.pos[1] + dy)
 
 	if(int(nearestMateDistance) < 10):
-		size = (rabbit.size+nearestMate.size)//2
-		rabbitOffspringHunger = 0.8 * (rabbit.size+nearestMate.size)//2 * 18
+
+		#offspring size is determined within mutate
+		size = mutate(rabbit, nearestMate)
+
+		rabbitOffspringHunger = 0.8 * size * 18
 		rabbit.timeOfLastFuck = clock.time()
 		nearestMate.timeOfLastFuck = clock.time()
-		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
+		#Make them have sex and spawn a new rabbit
 		rabbitList.append(Rabbit(rabbit.pos, size, rabbitOffspringHunger, random.randint(0, 360)))
 		#print("Reached mate")
 

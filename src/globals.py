@@ -17,6 +17,9 @@ minRabbitStartSize = 4
 
 maxRabbitStartSize = 14
 
+#percent chance of mutating
+mutateProbability = 25
+
 rabbitList = []
 grassList = []
 foxList = []
