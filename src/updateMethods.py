@@ -20,7 +20,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 			#Create a random set of cords and a random size
 			x = random.randint(-spawnRadius, spawnRadius)+canvasWidth/2
 			y = random.randint(-spawnRadius, spawnRadius)+canvasHeight/2
-			size = random.randint(6, 10)
+			size = random.randint(6, 12)
 
 			#check for overlap of rabbits
 			canPlace = 1
@@ -37,7 +37,8 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 			
 			#If no overlap, we can draw it
 			if(canPlace):
-				rabbitList.append(Rabbit((x, y), size, rabbitStartingHunger, random.randint(0, 360)))
+				maxHunger = size * 18
+				rabbitList.append(Rabbit((x, y), size, maxHunger, random.randint(0, 360)))
 				placed = 1
 				currentRabbitPop += 1
 
@@ -124,37 +125,40 @@ def updateRabbitStuff():
 
 	rabbitSizes = 0
 	for rabbit in rabbitList:
+		
+		print("Rabbit max hunger: {}\n Rabbit current hunger: {}".format(rabbit.maxHunger, rabbit.hunger))
+
 		rabbitSizes += rabbit.size
 		 
 		#Check if rabbit is starving aka the next hunger tick drops hunger leq 0
-		if(rabbit.hunger - rabbit.size*dt*10 <= 0):
+		if(rabbit.hunger - rabbit.velocity*dt*1500 <= 0):
 			#dont let hunger drop below 0 if starving
 			rabbit.hunger = 0
 			#Since we're starving, check if the next tick of health loss will kill us
-			if(rabbit.health - rabbit.size*dt*10 <= 0):
+			if(rabbit.health - rabbit.velocity*dt*1500 <= 0):
 				#if it will kill us, remove the rabbit
 				rabbitList.remove(rabbit)
 				#Dont do other stuff stince we're dead
 				continue
 			else:
 				#otherwise just reduce our health
-				rabbit.health -= rabbit.size*dt*10
+				rabbit.health -= rabbit.velocity*dt*1500
 		else:
 			#if not starving, reduce hunger and increase health by the same amount
-			rabbit.hunger -= rabbit.size*dt*10
+			rabbit.hunger -= rabbit.velocity*dt*1500
 
-			rabbit.health += rabbit.size*dt*10
+			rabbit.health += rabbit.velocity*dt*1500
 
-			if(rabbit.health > rabbitMaxHealth):
-				rabbit.health = rabbitMaxHealth
+			if(rabbit.health > rabbit.maxHealth):
+				rabbit.health = rabbit.maxHealth
 
 		#Prioritize running from foxes over eating and fucking
 		if(checkForPredators(rabbit) == False):
 			#If not hungry and havent fucked in 20 sec, check for a mate
-			if (rabbit.hunger > rabbitMaxHunger/2 and (clock.time() - rabbit.timeOfLastFuck > rabbitFuckDelay)):
+			if (rabbit.hunger > rabbit.maxHunger/2 and (clock.time() - rabbit.timeOfLastFuck > rabbitFuckDelay)):
 				rabbitSeekMate(rabbit)
 			#Search for food if hungry
-			elif(rabbit.hunger <= rabbitMaxHunger/2):
+			elif(rabbit.hunger <= rabbit.maxHunger/2):
 				# #Search through grass within searchRadius
 				rabbitForage(rabbit)
 			#If not hungry just move randomly
@@ -241,10 +245,10 @@ def rabbitEat(rabbit, visibleGrass):
 
 	#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
 	if(nearestGrassDistance < 5):
-		if(rabbit.hunger + rabbitMaxHunger/2 > rabbitMaxHunger):	
-			rabbit.hunger = rabbitMaxHunger
+		if(rabbit.hunger + rabbit.maxHunger/2 > rabbit.maxHunger):	
+			rabbit.hunger = rabbit.maxHunger
 		else:
-			rabbit.hunger += rabbitMaxHunger/2
+			rabbit.hunger += rabbit.maxHunger/2
 		grassList.remove(nearestGrass)
 		#print("Reached food")
 
@@ -265,13 +269,16 @@ def rabbitFuck(rabbit, visibleMates):
 	rabbit.pos = (rabbit.pos[0] + dx, rabbit.pos[1] + dy)
 
 	if(int(nearestMateDistance) < 10):
+		size = (rabbit.size+nearestMate.size)//2
+		rabbitOffspringHunger = 0.8 * (rabbit.size+nearestMate.size)//2 * 18
 		rabbit.timeOfLastFuck = clock.time()
 		nearestMate.timeOfLastFuck = clock.time()
 		#Make them have sex and spawn a new rabbit by averaging the stats of the parental rabbits
-		rabbitList.append(Rabbit(rabbit.pos, (rabbit.size+nearestMate.size)//2, rabbitOffspringHunger, random.randint(0, 360)))
+		rabbitList.append(Rabbit(rabbit.pos, size, rabbitOffspringHunger, random.randint(0, 360)))
 		#print("Reached mate")
 
 def rabbitForage(rabbit):
+	print("looking for grass")
 	#Search through grass within searchRadius
 	visibleGrass = []
 	for grass in grassList:
@@ -325,7 +332,7 @@ def rabbitSeekMate(rabbit):
 	#Check if any potential mates are within your vision
 	for rabbitB in rabbitList:
 		#Only go to mate if they're also looking for a mate
-		if(rabbitB.hunger > 50 and (clock.time() - rabbitB.timeOfLastFuck > rabbitFuckDelay)):
+		if(rabbitB.hunger > rabbitB.maxHunger/2 and (clock.time() - rabbitB.timeOfLastFuck > rabbitFuckDelay)):
 			#Dont check yourself
 			if(rabbitB != rabbit):
 				distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)

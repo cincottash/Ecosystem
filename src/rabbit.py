@@ -8,8 +8,10 @@ class Rabbit:
 		self.theta = theta
 		self.searchRadius = self.size*30
 		self.hunger = hunger
-		self.health = 100.0
+		self.health = self.hunger
 		self.velocity = 1/size
+		self.maxHunger = self.size * 18
 		self.timeOfLastFuck = clock.time()
+		self.maxHealth = self.maxHunger
 	timeBeforeRotate = random.uniform(3, 6)
 	timeOfLastRotation = clock.time()
