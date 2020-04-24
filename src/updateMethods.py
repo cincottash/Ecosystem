@@ -20,7 +20,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 			#Create a random set of cords and a random size
 			x = random.randint(-spawnRadius, spawnRadius)+canvasWidth/2
 			y = random.randint(-spawnRadius, spawnRadius)+canvasHeight/2
-			size = random.randint(6, 12)
+			size = random.randint(4, 14)
 
 			#check for overlap of rabbits
 			canPlace = 1
@@ -84,7 +84,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop, desiredFoxPop):
 			#Create a random set of cords
 			x = random.randint(-spawnRadius, spawnRadius)+canvasWidth/2
 			y = random.randint(-spawnRadius, spawnRadius)+canvasHeight/2
-			size = random.randint(10, 14)
+			size = random.randint(8, 14)
 
 			#check for overlap of rabbits
 			canPlace = 1
@@ -126,7 +126,7 @@ def updateRabbitStuff():
 	rabbitSizes = 0
 	for rabbit in rabbitList:
 		
-		print("Rabbit max hunger: {}\n Rabbit current hunger: {}".format(rabbit.maxHunger, rabbit.hunger))
+		#print("Rabbit max hunger: {}\n Rabbit current hunger: {}".format(rabbit.maxHunger, rabbit.hunger))
 
 		rabbitSizes += rabbit.size
 		 
@@ -174,7 +174,7 @@ def updateRabbitStuff():
 def updateGrassStuff():
 	global lastGrassPlaceTime
 
-	#respawn every 5 seconds
+	#respawn every couple seconds
 	if((clock.time() - lastGrassPlaceTime) > grassRespawnDelay):
 		placed = 0
 		while(placed == 0):
@@ -215,14 +215,11 @@ def moveRandomly(animal):
 		animal.theta = random.randint(0, 360)
 		animal.timeOfLastRotation = clock.time()
 		animal.timeBeforeRotate = random.uniform(3, 6)
+	
 	dx = animal.velocity*math.cos(animal.theta)
 	dy = animal.velocity*math.sin(animal.theta)
-	boundaryCheck(animal, dx, dy)
 	
-
-
-	##respawn every 15 seconds
-	#if((clock.time() - lastGrassPlaceTime) > 3):
+	boundaryCheck(animal, dx, dy)
 
 
 def rabbitEat(rabbit, visibleGrass):
@@ -278,7 +275,7 @@ def rabbitFuck(rabbit, visibleMates):
 		#print("Reached mate")
 
 def rabbitForage(rabbit):
-	print("looking for grass")
+	#print("looking for grass")
 	#Search through grass within searchRadius
 	visibleGrass = []
 	for grass in grassList:
