@@ -9,7 +9,9 @@ time = 0.00000
 dt = 0.00005
 spawnRadius = 450
 
-grassRespawnDelay = 4.5
+grassRespawnDelay = 4.0
+
+grassHealthRegen = 100
 
 rotationAngle = 90
 
@@ -18,7 +20,7 @@ minRabbitStartSize = 4
 maxRabbitStartSize = 14
 
 #percent chance of mutating
-mutateProbability = 25
+mutateProbability = 33
 
 rabbitList = []
 grassList = []

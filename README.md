@@ -14,11 +14,13 @@ A simple evolution simulator analgous to The Game of Life.
 
 * Animals move to food within their sight radius(grows lineraly with size value)
 
-* Food restores a fixed portion of hunger
+* Food restores a fixed amount of hunger
 
-* If animal hasn't reproduced in a fixed time T, isn't hungry and there exists another animal which also satisfies those requirenments, move towards that animal and reproduce.
+* If animal hasn't reproduced in a time T, isn't hungry and there exists another animal which also satisfies those requirenments, move towards that animal and reproduce.
 
 * The offspring's size will be an average of the parents(affecting the other stats).
+
+* Offspring have a chance to mutate, changing their size.
 
 * Foxes will try and eat rabbits, if there is a fox within a rabbit's sight, the rabbit will prioritize fleeing (until the fox is no longer visible) over eating and fucking.
 
@@ -28,9 +30,11 @@ A simple evolution simulator analgous to The Game of Life.
 
 * Grass respawns in a linear fashion.
 
-* If an animal's hunger, H, is 50 < H <  100, it will have a gradient between red and blue.  Fully blue when 100% Hunger and fully red when 50% hunger or less.
+* If an animal's hunger, H, is maxHunger/2 < H <  maxHunger, it will have a gradient between red and blue.  Fully blue when 100% Hunger and fully red when 50% hunger or less.
 
 * If an animals hunger drops below 0, it will bleed health.  It's color will also turn black.
+
+* Health regens when not starving.
 
 * Pressing enter at any time during the simulation will stop the simulation and print a graph of data(population/time & size/time)
 
@@ -52,13 +56,9 @@ A list of required libraries is located in requirments.txt and can be installed 
 ```python3 main.py InitialRabbitPop InitialGrassPop InitialFoxPop```
 
 ## Known Issues
-* Rabbits sometimes get stuck on outer edge of circle and clump together until dead(only when foxes present).
 
 * Foxes currently don't work
 
-* Animals don't regen HP (not implemented yet).
-
-* Min size capped at 6 idk why
 
 ## Acknowledgments
 

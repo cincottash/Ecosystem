@@ -242,14 +242,14 @@ def rabbitEat(rabbit, visibleGrass):
 
 	#check if a rabbit has reached the nearest piece of food and update stats/delete piece of food
 	if(nearestGrassDistance < 5):
-		if(rabbit.hunger + rabbit.maxHunger/2 > rabbit.maxHunger):	
+		if(rabbit.hunger + grassHealthRegen > rabbit.maxHunger):	
 			rabbit.hunger = rabbit.maxHunger
 		else:
-			rabbit.hunger += rabbit.maxHunger/2
+			rabbit.hunger += grassHealthRegen
 		grassList.remove(nearestGrass)
 		#print("Reached food")
 
-#offspring has a 25% chance for a mutation to happen when its born, returns new size
+#offspring has a chance for a mutation to happen when its born, returns new size
 def mutate(animalA, animalB):
 	mutate = random.randint(1, 100)
 
@@ -261,17 +261,17 @@ def mutate(animalA, animalB):
 
 		#if mag is 0, decrease size, if 1 increase it
 		if(magnitude == 1):
-			print("mutated larger")
-			size = int(size * 1.2)
+			#print("mutated larger")
+			size = int(size * 1.25)
 		else:
 			#check if decreasing the size will make the size less than 1 (size has to be at least 1)
-			if(int(size * 0.8) < 1):
+			if(int(size * 0.75) < 1):
 				#if we can't decrease, just increase instead
-				print("mutated larger")
-				size = int(size * 1.2)
+				#print("mutated larger")
+				size = int(size * 1.25)
 			else:
-				print("mutated smaller")
-				size = int(size * 0.8)
+				#print("mutated smaller")
+				size = int(size * 0.75)
 	return size
 
 def rabbitFuck(rabbit, visibleMates):
@@ -361,7 +361,7 @@ def rabbitSeekMate(rabbit):
 			#Dont check yourself
 			if(rabbitB != rabbit):
 				distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)
-				if(distance <= rabbit.searchRadius):
+				if(distance <= rabbit.searchRadius and distance <= rabbitB.searchRadius):
 					#print("See a mate")
 					visibleMates.append(rabbitB)
 
