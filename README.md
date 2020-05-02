@@ -18,6 +18,8 @@ A simple evolution simulator analgous to The Game of Life.
 
 * If animal hasn't reproduced in a time T, isn't hungry and there exists another animal which also satisfies those requirenments, move towards that animal and reproduce.
 
+* Having a baby reduces hunger of both parents by 1/3 of their max hunger
+
 * The offspring's size will be an average of the parents(affecting the other stats).
 
 * Offspring have a chance to mutate, changing their size.
