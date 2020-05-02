@@ -4,11 +4,11 @@ A simple evolution simulator analgous to The Game of Life.
 
 ## Features
 
-* Animals move in random direction for a random amount of time
+* Rabbits move in random direction for a random amount of time
 
-* Animal's velocity is based off their size
+* Rabbit's velocity is based off their size
 
-* Their hunger level decreases according to their size.
+* Rabbit's hunger level decreases according to their size.
 
 * When below 50% hunger they will search out food.
 
@@ -21,10 +21,6 @@ A simple evolution simulator analgous to The Game of Life.
 * The offspring's size will be an average of the parents(affecting the other stats).
 
 * Offspring have a chance to mutate, changing their size.
-
-* Foxes will try and eat rabbits, if there is a fox within a rabbit's sight, the rabbit will prioritize fleeing (until the fox is no longer visible) over eating and fucking.
-
-* If no foxes around a rabbit, the rabbit will prioritize eating over fucking.
 
 * Rabbits eat grass and move towards nearest grass if hungry.
 
@@ -53,12 +49,9 @@ A list of required libraries is located in requirments.txt and can be installed 
 * **[Shane Cincotta](https://github.com/cincottash)**
 
 ## Usage
-```python3 main.py InitialRabbitPop InitialGrassPop InitialFoxPop```
+```python3 main.py InitialRabbitPop InitialGrassPop```
 
 ## Known Issues
-
-* Foxes currently don't work
-
 
 ## Acknowledgments
 
