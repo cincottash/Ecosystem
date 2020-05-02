@@ -13,15 +13,14 @@ global time
 
 def main():
 
-	if(len(sys.argv) != 4):
-		print("Incorrect argument count. Correct usage is: InitialRabbitPop InitialGrassPop InitialFoxPop")
+	if(len(sys.argv) != 3):
+		print("Incorrect argument count. Correct usage is: InitialRabbitPop InitialGrassPop")
 		exit(0)
 	else:
 		intialRabbitPop = int(sys.argv[1])
 		intialGrassPop = int(sys.argv[2])
-		intialFoxPop = int(sys.argv[3])
 
-	populateCanvas(intialRabbitPop, intialGrassPop, intialFoxPop)
+	populateCanvas(intialRabbitPop, intialGrassPop)
 
 	#Use this later for graphing
 	maxRabbitPop = intialRabbitPop
@@ -63,8 +62,6 @@ def update():
 	updateRabbitStuff()
 
 	updateGrassStuff()
-
-	updateFoxStuff()
 
 	time += dt
 if __name__== '__main__':

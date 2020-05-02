@@ -1,11 +1,11 @@
 global time
 global dt
-global maxTime
+
 import time as clock
 canvasWidth = 1800
 canvasHeight = 1000
 
-time = 0.00000
+time = 0.0
 dt = 0.00005
 spawnRadius = 450
 
@@ -24,7 +24,6 @@ mutateProbability = 33
 
 rabbitList = []
 grassList = []
-foxList = []
 
 rabbitPop = []
 averageRabbitSize = []
