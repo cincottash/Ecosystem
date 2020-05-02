@@ -11,7 +11,7 @@ def populateCanvas(desiredRabbitPop, desiredGrassPop):
 	currentRabbitPop = 0
 	currentGrassPop = 0
 
-	#Populate canvas with rabbits of random size in random loctions, no overlap of rabbits allowed
+	#Populate canvas with rabbits of random size in random loctions, no overlap allowed
 	while(currentRabbitPop < desiredRabbitPop):
 		placed = 0
 		while(placed == 0):
@@ -80,8 +80,6 @@ def updateRabbitStuff():
 	rabbitSizes = 0
 	for rabbit in rabbitList:
 		
-		#print("Rabbit max hunger: {}\n Rabbit current hunger: {}".format(rabbit.maxHunger, rabbit.hunger))
-
 		rabbitSizes += rabbit.size
 		 
 		#Check if rabbit is starving aka the next hunger tick drops hunger leq 0
@@ -208,7 +206,7 @@ def mutate(animalA, animalB):
 
 	size = (animalA.size+animalB.size)//2
 
-	#if we can mutate, change the size by 20% with a random magnitude
+	#if we can mutate, change the size by 25% with a random magnitude
 	if(mutate <= mutateProbability):
 		magnitude = random.randint(0, 1)
 
@@ -243,7 +241,7 @@ def rabbitFuck(rabbit, visibleMates):
 	dy = rabbit.velocity * math.sin(theta)
 	rabbit.pos = (rabbit.pos[0] + dx, rabbit.pos[1] + dy)
 
-	if(int(nearestMateDistance) < 10):
+	if(int(nearestMateDistance) < rabbit.size):
 
 		#offspring size is determined within mutate
 		size = mutate(rabbit, nearestMate)
@@ -256,7 +254,6 @@ def rabbitFuck(rabbit, visibleMates):
 		#print("Reached mate")
 
 def rabbitForage(rabbit):
-	#print("looking for grass")
 	#Search through grass within searchRadius
 	visibleGrass = []
 	for grass in grassList:
