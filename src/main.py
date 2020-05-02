@@ -13,6 +13,8 @@ global time
 
 def main():
 
+	startTime = clock.time()
+
 	if(len(sys.argv) != 3):
 		print("Incorrect argument count. Correct usage is: InitialRabbitPop InitialGrassPop")
 		exit(0)
@@ -32,7 +34,7 @@ def main():
 		
 
 		pygame.draw.circle(canvas, BROWN, (canvasWidth//2, canvasHeight//2), spawnRadius)
-		update()
+		update(startTime)
 		
 		drawSprites()
 
@@ -56,13 +58,14 @@ def main():
 	
 
 	
-def update():
+def update(startTime):
 	global time
 	
 	updateRabbitStuff()
 
 	updateGrassStuff()
 
-	time += dt
+	time = int(clock.time() - startTime)
+	#print(time)
 if __name__== '__main__':
 	main()
