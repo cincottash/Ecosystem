@@ -26,6 +26,7 @@ def main():
 
 	#Use this later for graphing
 	maxRabbitPop = intialRabbitPop
+	maxAvgRabbitSize = 0
 
 	while (True):
 		#reset background
@@ -41,6 +42,13 @@ def main():
 		if(len(rabbitList) > maxRabbitPop):
 			maxRabbitPop = len(rabbitList)
 
+		temp = 0
+		for rabbit in rabbitList:
+			temp += rabbit.size
+		temp = temp/len(rabbitList)
+		if(temp > maxAvgRabbitSize):
+			maxAvgRabbitSize = temp
+
 		rabbitPop.append(len(rabbitList))
 		
 		timeStamps.append(time)
@@ -52,7 +60,7 @@ def main():
 		for event in pygame.event.get():	
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_RETURN:
-					plotStuff(timeStamps[len(timeStamps) - 1], maxRabbitPop)
+					plotStuff(timeStamps[len(timeStamps) - 1], maxRabbitPop, maxAvgRabbitSize)
 					exit(0)
 
 	
@@ -66,6 +74,6 @@ def update(startTime):
 	updateGrassStuff()
 
 	time = int(clock.time() - startTime)
-	#print(time)
+
 if __name__== '__main__':
 	main()

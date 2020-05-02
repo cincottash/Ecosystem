@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from globals import *
 
-def plotStuff(xLim, maxRabbits):
+def plotStuff(xLim, maxRabbits, maxAvgRabbitSize):
 
 	X = np.array(timeStamps)
 	Y = np.array(rabbitPop)
@@ -15,7 +15,7 @@ def plotStuff(xLim, maxRabbits):
 	plt.xlim(0, xLim)
 
 	#Make the graph go 10% higher than the max rabbits
-	plt.ylim(0, maxRabbits + maxRabbits*0.1)
+	plt.ylim(0, 1.1*maxRabbits)
 	plt.grid(True)
 
 	X = np.array(timeStamps)
@@ -25,7 +25,7 @@ def plotStuff(xLim, maxRabbits):
 	plt.scatter(X, Y, s = 3.0)
 	plt.title('Average Rabbit Size vs Time')
 	plt.xlim(0, xLim)
-	plt.ylim(0, 12)
+	plt.ylim(0, 1.1*maxAvgRabbitSize)
 	plt.grid(True)
 	
 	plt.show()
