@@ -9,7 +9,7 @@ time = 0.0
 dt = 0.00005
 spawnRadius = 450
 
-grassRespawnDelay = 4.0
+grassRespawnDelay = 5.0
 
 grassHealthRegen = 100
 

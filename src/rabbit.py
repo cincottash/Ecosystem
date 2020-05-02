@@ -9,7 +9,7 @@ class Rabbit:
 		self.searchRadius = self.size*30
 		self.hunger = hunger
 		self.health = self.hunger
-		self.velocity = 1/size
+		self.velocity = 1.5/size
 		self.maxHunger = self.size * 18 + 20
 		self.timeOfLastFuck = clock.time()
 		self.maxHealth = self.maxHunger
