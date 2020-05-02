@@ -45,7 +45,9 @@ def main():
 		temp = 0
 		for rabbit in rabbitList:
 			temp += rabbit.size
+		
 		temp = temp/len(rabbitList)
+		
 		if(temp > maxAvgRabbitSize):
 			maxAvgRabbitSize = temp
 
@@ -56,7 +58,7 @@ def main():
 		#commit changes
 		pygame.display.update()
 
-
+		#Press enter to stop sim and graph results
 		for event in pygame.event.get():	
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_RETURN:

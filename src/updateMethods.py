@@ -251,6 +251,8 @@ def rabbitFuck(rabbit, visibleMates):
 		nearestMate.timeOfLastFuck = clock.time()
 		#Make them have sex and spawn a new rabbit
 		rabbitList.append(Rabbit(rabbit.pos, size, rabbitOffspringHunger, random.randint(0, 360)))
+		rabbit.hunger -= rabbit.maxHunger/3
+		nearestMate.hunger -= nearestMate.maxHunger/3
 		#print("Reached mate")
 
 def rabbitForage(rabbit):
@@ -276,7 +278,7 @@ def rabbitSeekMate(rabbit):
 	#Check if any potential mates are within your vision
 	for rabbitB in rabbitList:
 		#Only go to mate if they're also looking for a mate
-		if(rabbitB.hunger > rabbitB.maxHunger/2 and (clock.time() - rabbitB.timeOfLastFuck > rabbit.fuckDelay)):
+		if(rabbitB.hunger > rabbitB.maxHunger/2 and (clock.time() - rabbitB.timeOfLastFuck > rabbitB.fuckDelay)):
 			#Dont check yourself
 			if(rabbitB != rabbit):
 				distance = math.sqrt((rabbitB.pos[0] - rabbit.pos[0])**2 + (rabbitB.pos[1] - rabbit.pos[1])**2)-(rabbitB.size + rabbit.size)
